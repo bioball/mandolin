@@ -24,7 +24,7 @@ foo().match({
 })
 ```
 
-The drawbacks are the lack of compile-time syntax and type checks. However, it does make using Options more practical.
+The drawbacks are the lack of compile-time syntax and type checks. However, it does make using Options more practical. In the same vein, here's faux-pattern matching for an `Either`.
 
 ```js
 foo().match({

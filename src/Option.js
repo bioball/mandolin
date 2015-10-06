@@ -18,6 +18,22 @@ class Option {
     return this.val === null;
   }
 
+  unit () {
+    return new Option(this.val);
+  }
+
+  /**
+   * Serializes a value into an Option of its type.
+   *
+   * @example
+   * Option.as(String)("foo")
+   * // => Some("foo")
+   * Option.as(String)()
+   * // => None
+   * 
+   * @param  {Constructor} T An instance of the constructor that creates these types
+   * @return {Function}   The serializer function
+   */
   as (T) {
     return (val) => {
       if (val === null) {
@@ -43,12 +59,18 @@ class Option {
 
   /**
    * Return a new option type based on running f.
+   *
+   * @example
+   * Some("Barry")
+   * .map((n) => n + " Bonds")
+   * // => Some("Barry Bonds")
+   * 
    * @param  {(A) => A} f 
    * @return {Option[A]}
    */
   map (f) {
     if (this.isSome()) {
-      return Option(f(this.val));
+      return new Option(f(this.val));
     }
     return this;
   }
@@ -57,11 +79,10 @@ class Option {
    * Return a new option type given a function that returns an Option type.
    *
    * @example
-   * foo.flatMap((val) => {
-   *   return new Option(val.toOther());
-   * })
+   * Some(5).flatMap((val) => new Option(val + 4))
+   * // => Some(9)
    * 
-   * @param  {(A) => Option(A)} f
+   * @param  {(A) => new Option(A)} f
    * @return {A}
    */
   flatMap (f) {
@@ -73,6 +94,12 @@ class Option {
 
   /**
    * If this is a some, returns the value. Otherwise, returns the return value of `f`.
+   *
+   * @example
+   * None().map((val) => val + "foo")
+   * .getOrElse("Bayview Hunter's Point")
+   * // => "Bayview Hunter's Point"
+   * 
    * @param  {[type]} f [description]
    * @return {[type]}   [description]
    */
@@ -87,14 +114,15 @@ class Option {
    * Helper for operations on options. Calling `match` is the same thing as chaining `map` and `getOrElse`.
    * 
    * @example
-   * foo.match({
-   *   some (bar) {
-   *     return doThingWithBar(bar);
+   * Some(3).match({
+   *   some (a) {
+   *     return a + 5;
    *   },
    *   none () {
-   *     return doThingWhenNone();
+   *     return 0;
    *   }
    * });
+   * // => 8
    * 
    * @param  {(A) => A} options.some    
    * @param  {() => A} options.none
