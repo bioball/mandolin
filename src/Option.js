@@ -114,11 +114,11 @@ class Option {
    * Helper for operations on options. Calling `match` is the same thing as chaining `map` and `getOrElse`.
    * 
    * @example
-   * Some(3).match({
-   *   some (a) {
+   * new Some(3).match({
+   *   Some (a) {
    *     return a + 5;
    *   },
-   *   none () {
+   *   None () {
    *     return 0;
    *   }
    * });
@@ -128,27 +128,27 @@ class Option {
    * @param  {() => A} options.none
    * @return {A} The value itself.
    */
-  match ({ some, none }) {
-    return this.map(some).getOrElse(none);
+  match ({ Some, None }) {
+    return this.map(Some).getOrElse(None);
   }
 
 }
 
 class Some extends Option {
   constructor (val) {
+    super(val);
     if (!this instanceof Some) {
       return new Some(val);
     }
-    super(val);
   }
 }
 
 class None extends Option {
   constructor () {
+    super();
     if (!this instanceof None) {
       return new None();
     }
-    super();
   }
 }
 

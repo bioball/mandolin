@@ -1,0 +1,28 @@
+{
+  "name": "monadia",
+  "version": "0.0.0",
+  "description": "This is an attempt to make Monadic types practical in JavaScript. This is heavily inspired by Scala.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "chai": "~3.3.0",
+    "mocha": "~2.3.3"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bioball/monadia.git"
+  },
+  "author": "Daniel Chao (http://dchao.co/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bioball/monadia/issues"
+  },
+  "homepage": "https://github.com/bioball/monadia"
+}
