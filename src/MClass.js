@@ -1,12 +1,5 @@
 const { Left, Right } = require('./Either');
 
-const mapObj = (f, obj) => {
-  return Object.keys(obj).reduce((acc, key) => {
-    acc[key] = f(obj[key], key);
-    return acc;
-  }, {});
-};
-
 const extend = (obj1, obj2) => {
   for (var key in obj2) {
     obj1[key] = obj2[key];
@@ -23,12 +16,12 @@ const getValue = (obj, value, typeDef, key) => {
     return new Right(obj);
   }
   return Left(new Error("Failed to deserialize property ${ key }"));
-}
+};
 
 /**
  * Given a typedef object and a set of values, deserialize them.
  * 
- * @return {Either<A, Error>}
+ * @return {Either<Error, Object>}
  */
 const deserialize = (typeDef, properties) => {
   return Object.keys(typeDef).reduce((either, key) => {
