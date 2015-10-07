@@ -1,6 +1,6 @@
 /**
  * @class Either
- * A disjunt union type of Left and Right, and is right-biased. The difference between this and an Option, is that a Left can also hold values.
+ * A disjunt union type of Left and Right, and is right-biased; `map` and `flatMap` are only called if it is a Right. The difference between this and an Option, is that a Left can also hold values.
  */
 class Either {
 
@@ -32,7 +32,7 @@ class Either {
         return new Right(val);
       }
       if (val instanceof A) {
-        return new Left(A);
+        return new Left(val);
       }
       throw new Exception(`Could not serialize value %o as an Option of %{ T }`, val)
     }

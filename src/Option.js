@@ -23,31 +23,6 @@ class Option {
   }
 
   /**
-   * Serializes a value into an Option of its type.
-   *
-   * @example
-   * Option.as(String)("foo")
-   * // => Some("foo")
-   * Option.as(String)()
-   * // => None
-   * 
-   * @param  {Constructor} T An instance of the constructor that creates these types
-   * @return {Function}   The serializer function
-   */
-  as (T) {
-    return (val) => {
-      if (val === null) {
-        return new None();
-      }
-      if (val instanceof T) {
-        return new Some(val);
-      }
-      throw new Exception(`Could not serialize value %o as an Option of %{ T }`, val)
-    }
-  }
-
-
-  /**
    * @private
    */
   get () {
@@ -133,6 +108,30 @@ class Option {
   }
 
 }
+
+/**
+ * Serializes a value into an Option of its type.
+ *
+ * @example
+ * Option.as(String)("foo")
+ * // => Some("foo")
+ * Option.as(String)()
+ * // => None
+ * 
+ * @param  {Constructor} T An instance of the constructor that creates these types
+ * @return {Function}   The serializer function
+ */
+Option.as = function (T) {
+  return (val) => {
+    if (val === null) {
+      return new None();
+    }
+    if (val instanceof T) {
+      return new Some(val);
+    }
+    throw new Exception(`Could not serialize value %o as an Option of %{ T }`, val)
+  }
+};
 
 class Some extends Option {
   constructor (val) {

@@ -1,5 +1,6 @@
 const MClass = require('../src/MClass');
 const { expect } = require('chai');
+const { Option, Some, None } = require('../src/Option');
 
 describe("MClass", function(){
 
@@ -25,5 +26,29 @@ describe("MClass", function(){
       })
     }).to.throw();
   });
+
+  it("will deserialize monadic types", function(){
+    const House = MClass.createClass({
+      street: Option.as(String),
+      streetNumber: Option.as(Number)
+    });
+
+    House.parseFromJsObj({
+      street: "Somewhere over the rainbow",
+      streetNumber: undefined
+    }).match({
+      Right (house) {
+        console.log(house);
+        expect(house).to.be.an.instanceof(House);
+        expect(house.street.isSome()).to.be.true;
+        expect(house.street.get()).to.equal("Somewhere over the rainbow");
+        expect(house.streetNumber.isNone()).to.be.true;
+      },
+      Left (err) {
+        throw err;
+      }
+    });
+
+  })
 
 });

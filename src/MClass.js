@@ -1,4 +1,4 @@
-const { Either, Left, Right } = require('./Either');
+const { Left, Right } = require('./Either');
 
 const mapObj = (f, obj) => {
   return Object.keys(obj).reduce((acc, key) => {
@@ -13,7 +13,12 @@ const extend = (obj1, obj2) => {
   }
 };
 
-const serialize = (typeDef, properties) => {
+/**
+ * Given a typedef object and a set of values, deserialize them.
+ * 
+ * @return {Either<A, Error>}
+ */
+const deserialize = (typeDef, properties) => {
   try {
     const result = mapObj((value, key) => {
       if (value instanceof typeDef[key]) {
@@ -30,18 +35,29 @@ const serialize = (typeDef, properties) => {
   }
 };
 
+const parseFromJsObj = function (typeDef, Ctor, obj) {
+  return deserialize(typeDef, obj).map((parsed) => new Ctor(parsed));
+};
+
+const withPrototype = function(Ctor, proto){
+  extend(Ctor.prototype, proto);
+  return Ctor;
+};
+
 const createClass = (typeDef = {}) => {
-  const C = function (properties = {}) {
+  const Ctor = function (properties = {}) {
     const _this = this;
-    serialize(typeDef, properties).match({
+    deserialize(typeDef, properties).match({
       Right (values) { extend(_this, values) },
       Left (err) { throw err; }
     });
   };
 
-  C.__typeDef = typeDef;
+  Ctor.__typeDef = typeDef;
+  Ctor.parseFromJsObj = parseFromJsObj.bind(typeDef, Ctor);
+  Ctor.withPrototype = withPrototype.bind(Ctor);
 
-  return C;
+  return Ctor;
 };
 
 module.exports = { createClass };
