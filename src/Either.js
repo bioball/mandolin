@@ -79,7 +79,7 @@ class Either {
 
   flatMap (f) {
     if (this.isRight()) {
-      return f(this.val());
+      return f(this.val);
     }
     return this;
   }

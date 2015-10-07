@@ -13,26 +13,30 @@ const extend = (obj1, obj2) => {
   }
 };
 
+const getValue = (obj, value, typeDef, key) => {
+  if (value instanceof typeDef[key]) {
+    obj[key] = value;
+    return new Right(obj);
+  }
+  if (typeof typeDef[key] === "function") {
+    obj[key] = typeDef[key](value);
+    return new Right(obj);
+  }
+  return Left(new Error("Failed to deserialize property ${ key }"));
+}
+
 /**
  * Given a typedef object and a set of values, deserialize them.
  * 
  * @return {Either<A, Error>}
  */
 const deserialize = (typeDef, properties) => {
-  try {
-    const result = mapObj((value, key) => {
-      if (value instanceof typeDef[key]) {
-        return value;
-      }
-      if (typeof typeDef[key] === "function") {
-        return typeDef[key](value);
-      }
-      throw new TypeError("Failed to initialize with property %o", key);
-    }, properties);
-    return new Right(result);
-  } catch (err) {
-    return new Left(err);
-  }
+  return Object.keys(typeDef).reduce((either, key) => {
+    if (either.isLeft()) {
+      return either;
+    }
+    return either.flatMap((obj) => getValue(obj, properties[key], typeDef, key));
+  }, new Right({}));
 };
 
 const parseFromJsObj = function (typeDef, Ctor, obj) {
