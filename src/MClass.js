@@ -32,6 +32,9 @@ const deserialize = (typeDef, properties) => {
   }, new Right({}));
 };
 
+/**
+ * @return {Either<Error, A>}
+ */
 const parseFromJsObj = function (typeDef, Ctor, obj) {
   return deserialize(typeDef, obj).map((parsed) => new Ctor(parsed));
 };

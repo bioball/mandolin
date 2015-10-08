@@ -11,11 +11,11 @@ class Option {
   }
 
   isSome () {
-    return this.val !== null;
+    return this instanceof Some;
   }
 
   isNone () {
-    return this.val === null;
+    return this instanceof None;
   }
 
   unit () {
@@ -29,7 +29,7 @@ class Option {
     if (this.isSome()) {
       return this.val;
     }
-    throw new Exception("Performed a get on a None type")
+    throw new Error("Performed a get on a None type")
   }
 
   /**
@@ -45,7 +45,7 @@ class Option {
    */
   map (f) {
     if (this.isSome()) {
-      return new Option(f(this.val));
+      return new Some(f(this.val));
     }
     return this;
   }
