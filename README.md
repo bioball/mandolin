@@ -81,7 +81,7 @@ Person.parseFromJsObj({
 Naturally, they would deserialize back into JSON as well.
 
 
-**Further thoughts:**
+### Further thoughts
 
 A serious problem coming up is primitive types in JavaScript don't necessary behave as instances of their constructor. For instance:
 
