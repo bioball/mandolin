@@ -169,14 +169,14 @@ With only providing parsers and serializers, here's what an integration might lo
 
 ```js
 class User {
-  const definition = {
-    "firstName": Option.as(M.string),
-    "lastName": Option.as(M.string)
-  };
   constructor (params = {}) {
+    const definition = {
+      "firstName": Option.as(M.string),
+      "lastName": Option.as(M.string)
+    };
     const _this = this;
     M.parseObj(params).with(defintion).match({
-      Right (user) { _.extend(_this, user); }
+      Right (user) { _.extend(_this, user); },
       Left (err) { throw err; }
     });
   }
