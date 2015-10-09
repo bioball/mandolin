@@ -110,27 +110,35 @@ class Option {
 }
 
 /**
- * Serializes a value into an Option of its type.
+ * Generic Reads for the option type.
+ */
+Option.reads = new Reads(function(val){
+  const opt = (val === null || val === undefined) ? new None() : new Some(val);
+  return new Right(opt);
+});
+
+/**
+ * Composes a Read for an arbitrary type with a Read for an Option type.
  *
  * @example
- * Option.as(String)("foo")
- * // => Some("foo")
- * Option.as(String)()
- * // => None
+ * // Generic Read for Option of a String
+ * Option.as(M.string)("foo") // => Some("foo")
+ * Option.as(M.string)() // => None()
+ *
+ * // Read to perform an intanceof check
+ * Option.as(M.instance(User))(new User()) // => Some(User())
+ *
+ * // Reads for only odd integers
+ * Option.as(new Reads((val) => val % 2 ? new Right(val) : new Left(val)))
  * 
- * @param  {Constructor} T An instance of the constructor that creates these types
+ * @param  {Read} read A Reads for this type of value.
  * @return {Function}   The serializer function
  */
-Option.as = function (T) {
-  return (val) => {
-    if (val === null) {
-      return new None();
-    }
-    if (val instanceof T) {
-      return new Some(val);
-    }
-    throw new Exception(`Could not serialize value %o as an Option of %{ T }`, val)
-  }
+Option.as = Option.as = function(read){
+  return Option.reads.flatMap(read);
+  // return new Reads(function(v){
+  //   return Option.reads.getValue(v).flatMap(read.getValue);
+  // });
 };
 
 class Some extends Option {
@@ -140,6 +148,10 @@ class Some extends Option {
       return new Some(val);
     }
   }
+
+  toJSON () {
+    return this.value;
+  }
 }
 
 class None extends Option {
@@ -148,6 +160,10 @@ class None extends Option {
     if (!this instanceof None) {
       return new None();
     }
+  }
+
+  toJSON () {
+    return null;
   }
 }
 

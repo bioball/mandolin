@@ -7,15 +7,10 @@ const extend = (obj1, obj2) => {
 };
 
 const getValue = (obj, value, typeDef, key) => {
-  if (value instanceof typeDef[key]) {
-    obj[key] = value;
-    return new Right(obj);
-  }
-  if (typeof typeDef[key] === "function") {
-    obj[key] = typeDef[key](value);
-    return new Right(obj);
-  }
-  return Left(new Error("Failed to deserialize property ${ key }"));
+  return typeDef[key].getValue(value).map((val) => {
+    obj[key] = val;
+    return obj;
+  });
 };
 
 /**

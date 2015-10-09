@@ -1,10 +1,16 @@
 /**
  * @class Either
- * A disjunt union type of Left and Right, and is right-biased; `map` and `flatMap` are only called if it is a Right. The difference between this and an Option, is that a Left can also hold values.
+ * A disjoint union of Left and Right, and is right-biased. `map` and `flatMap` are only called if it is a Right. 
+ * The difference between this and an Option, is that a Left can also hold values.
+ *
+ * An Either does not hold two values. Rather, it holds one value, which is either a Left or a Right.
  */
 class Either {
 
   constructor (val = null) {
+    if (this instanceof Either) {
+      throw new Error("An Either type should be instantiated using `new Left()` or `new Right()`");
+    }
     this.val = val;
   }
 
@@ -60,7 +66,7 @@ class Either {
   }
 
   /**
-   * Return a new option type based on running f.
+   * Return a new Either based on running f.
    *
    * @example
    * Right("Barry")
@@ -68,13 +74,86 @@ class Either {
    * // => Right("Barry Bonds")
    * 
    * @param  {(A) => A} f 
-   * @return {Either[_, A]}
+   * @return {Either}
    */
   map (f) {
     if (this.isRight()) {
       return new Right(f(this.val));
     }
     return this;
+  }
+
+  /**
+   * Return a new Either based on running f.
+   *
+   * @example
+   * Right("Chuck")
+   * .flatMap((n) => new Right(n + " Norris"))
+   * // => Right("Chuck Norris")
+   * 
+   * @param  {(A) => Either} f
+   * @return {Either}
+   */
+  flatMap (f) {
+    if (this.isRight()) {
+      return f(this.val);
+    }
+    return this;
+  }
+
+  /**
+   * Compose on the left
+   *
+   * @example
+   * Left("Chuck")
+   * .map((n) => n + " Norris")
+   * // => Left("Chuck Norris")
+   *
+   * @param  {(A) => A} f 
+   * @return {Either}
+   */
+  mapLeft (f) {
+    if (this.isLeft()) {
+      return new Left(f(this.val));
+    }
+    return this;
+  }
+
+  /**
+   * Compose on the left
+   * @param  {(A) => Either} f
+   * @return {Either}
+   */
+  flatMapLeft (f) {
+    if (this.isLeft()) {
+      return f(this.val);
+    }
+    return this;
+  }
+
+
+  /**
+   * Cast this to a Right.
+   * @return {Right}
+   */
+  toRight () {
+    return new Right(this.val);
+  }
+
+  /**
+   * Cast this to a Left.
+   * @return {Left}
+   */
+  toLeft () {
+    return new Left(this.val);
+  }
+
+  /**
+   * If Left, switch to Right. If Right, switch to left.
+   * @return {Either}
+   */
+  flip () {
+    return this.isLeft() ? this.toRight() : this.toLeft();
   }
 
   flatMap (f) {
