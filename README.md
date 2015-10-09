@@ -79,3 +79,73 @@ Person.parseFromJsObj({
 ```
 
 Naturally, they would deserialize back into JSON as well.
+
+
+**Further thoughts:**
+
+A serious problem coming up is primitive types in JavaScript don't necessary behave as instances of their constructor. For instance:
+
+```js
+"foo" instanceof String
+// => false
+```
+
+My initial thought to implementing classes with type definitions was to just use a bunch of `instanceof` checks, so you can pass their constructors in. That clearly doesn't work, so the syntax of `createClass({ firstName: String })` isn't going to cut it.
+
+My revised approach is to do something like this:
+
+```js
+const Person = createClass({
+  "firstName": M.string,
+  lastName: M.string
+});
+```
+
+`M` is just a placeholder reference until I figure out a name for this project. `M.string` wouldn't be a reference to the `String` constructor, but a `Reads` object for the `String` type. This is another inspiration from Scala.
+
+Here's a possible implementation for a `Reads`
+
+```js
+class Reads {
+  constructor (reader) {
+    this.reader = reader;
+  }
+  getValue (val) {
+    return this.reader(val);
+  }
+}
+
+M.string = new Reads(function(val){
+  if (typeof val !== "string") {
+    throw new Error("Attempted to read %o as a String value", val)
+  }
+  return val;
+});
+```
+
+All of JavaScript's primitives would have a pre-baked Reads for them--`Number`, `Boolean`, `String`, etc. 
+
+For class types, each of my monadic types could be defined via this syntax
+
+```js
+createClass({
+  email: Option.as(M.string)
+})
+```
+
+Implementation:
+
+```js
+Option.as = new Reads(function(read){
+  return function(val){
+    if (val === null || val === undefined) {
+      return None();
+    }
+    return new Some(read.getValue(val));
+  }
+});
+```
+
+Each algebraic type will need to define its own `as` function, because the rules for deserialization are different.
+
+**Further thoughts**: What should deserialization look like for an `Either`? Given there might be the same type for `Left` and `Right`?
