@@ -136,14 +136,14 @@ createClass({
 Implementation:
 
 ```js
-Option.as = new Reads(function(read){
-  return function(val){
+Option.as = function(read){
+  return new Reads(function(val){
     if (val === null || val === undefined) {
       return None();
     }
     return new Some(read.getValue(val));
-  }
-});
+  });
+};
 ```
 
 Each algebraic type will need to define its own `as` function, because the rules for deserialization are different.
