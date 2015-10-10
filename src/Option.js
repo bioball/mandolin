@@ -151,17 +151,18 @@ class Some extends Option {
   }
 
   toJSON () {
-    return this.value;
+    return this.val;
   }
 
   toString () {
-    return `Some(${ this.value })`
+    return `Some(${ this.val })`
   }
 }
 
 class None extends Option {
   constructor () {
     super();
+    this.toJSON = () => "None()";
   }
 
   toJSON () {

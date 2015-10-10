@@ -5,9 +5,7 @@ const Reads = require('../src/Reads');
 describe('Option', function(){
 
   it('is an abstract class', function(){
-    expect(function(){
-      return new Option("foo")
-    }).to.throw()
+    expect(() => new Option("foo")).to.throw()
   });
 
   it("has these methods", function(){
@@ -84,5 +82,12 @@ describe('Option', function(){
     });
 
   });
+
+  describe("deserializing", function(){
+    const obj = {
+      opt: new Some("bar")
+    };
+    expect(JSON.stringify(obj)).to.equal('{"opt":"bar"}');
+  })
 
 });
