@@ -136,12 +136,6 @@ class Either {
     return this.isLeft() ? this.toRight() : this.toLeft();
   }
 
-  flatMap (f) {
-    if (this.isRight()) {
-      return f(this.val);
-    }
-    return this;
-  }
 
   getOrElse (f) {
     if (this.isRight()) {

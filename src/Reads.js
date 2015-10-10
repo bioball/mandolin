@@ -5,6 +5,8 @@
 // 
 // Calls to `map` and `flatMap` are lazy. They don't do anything until `getValue` is called.
 
+const { Left, Right } = require('./Either');
+
 class Reads {
   /**
    * @param  {(Any) => Either} reader 
@@ -17,20 +19,19 @@ class Reads {
 
   /**
    * Compose on a successful read.
-   * @param  {Reads} r The next reads to perform
+   * @param  {(A) => A} r The next reader to perform
    * @return {Reads}
    */
-  map (r) {
-    return new Reads(() => this.getValue().flatMap(r.getValue));
+  map (f) {
+    return new Reads((v) => this.getValue(v).map(f))
   }
 
   /**
-   * Compose on both successful and unsuccessful reads
-   * @param  {Reads} r The next reads to perform
-   * @return {Reads}
+   * Compose on a successful read.
+   * @param  {(A) => Either} r The next reader to perform
    */
-  chain (r) {
-    return new Reads(() => this.getValue().map(r.getValue).mapLeft(r.getValue));
+  flatMap (f) {
+    return new Reads((v) => this.getValue(v).flatMap(f));
   }
 
   /**
@@ -44,12 +45,44 @@ class Reads {
 }
 
 Reads.instance = function (T) {
-  return new Reads(function(v){
+  return new Reads(function (v) {
     if (v instanceof T) {
       return new Right(v);
     }
     return new Left(v);
   });
 };
+
+/**
+ * Define baked-in Reads for JavaScript primitives.
+ *
+ * Reads.string
+ * Reads.boolean
+ * Reads.number
+ * Reads.object
+ * Reads.
+ */
+[
+  "string",
+  "boolean",
+  "number",
+  "object",
+  "null",
+  "undefined"
+].forEach((t) => {
+  Reads[t] = new Reads(function (v) {
+    if (typeof v === t) {
+      return new Right(v);
+    }
+    return new Left(new Error(`Attempted to read value as ${ t.toUpperCase() }, but instead got ${ v }`));
+  });
+});
+
+Reads.array = new Reads(function (v) {
+  if (Array.isArray(v)) {
+    return new Right(v);
+  }
+  return new Left(new Error(`Attempted to read value as Array, but instead got ${ v }`));
+});
 
 module.exports = Reads;

@@ -1,5 +1,6 @@
 const utils = require('./utils');
 const Reads = require('./Reads');
+const { Left, Right } = require('./Either');
 
 /**
  * @class Option
@@ -116,6 +117,7 @@ class Option {
 
 /**
  * Generic Reads for the option type.
+ * @return {Right<Option>}
  */
 Option.reads = new Reads(function(val){
   const opt = (val === null || val === undefined) ? new None() : new Some(val);
@@ -139,11 +141,8 @@ Option.reads = new Reads(function(val){
  * @param  {Read} read A Reads for this type of value.
  * @return {Read}
  */
-Option.as = Option.as = function(read){
-  return Option.reads.map(read);
-  return new Reads(function(v){
-    return Option.reads.getValue(v).flatMap(read.getValue);
-  });
+Option.as = function(read){
+  return Option.reads.map((opt) => opt.flatMap(read.getValue));
 };
 
 class Some extends Option {
@@ -154,6 +153,10 @@ class Some extends Option {
   toJSON () {
     return this.value;
   }
+
+  toString () {
+    return `Some(${ this.value })`
+  }
 }
 
 class None extends Option {
@@ -163,6 +166,10 @@ class None extends Option {
 
   toJSON () {
     return null;
+  }
+
+  toString () {
+    return "None()";
   }
 }
 
