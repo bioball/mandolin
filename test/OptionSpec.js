@@ -3,6 +3,25 @@ const { Option, Some, None } = require('../src/Option');
 const Reads = require('../src/Reads');
 
 describe('Option', function(){
+
+  it('is an abstract class', function(){
+    expect(function(){
+      return new Option("foo")
+    }).to.throw()
+  });
+
+  it("has these methods", function(){
+    expect(Option).to.respondTo("isSome");
+    expect(Option).to.respondTo("isNone");
+    expect(Option).to.respondTo("unit");
+    expect(Option).to.respondTo("get");
+    expect(Option).to.respondTo("map");
+    expect(Option).to.respondTo("flatMap");
+    expect(Option).to.respondTo("getOrElse");
+    expect(Option).to.respondTo("match");
+    expect(Option).itself.to.respondTo("as");
+  });
+
   describe('Some', function(){
     it("knows it is a Some", function(){
       const opt = new Some("foo");
@@ -65,4 +84,5 @@ describe('Option', function(){
     });
 
   });
+
 });

@@ -1,5 +1,5 @@
-module.exports.abstractClassCheck = (current, target, name) => {
-  if (current === target) {
+module.exports.abstractClassCheck = (currentThis, target, name) => {
+  if (currentThis.constructor === target) {
     throw new Error(`Cannot instantiate abstract class ${ name }`)
   }
 };
