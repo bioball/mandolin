@@ -172,7 +172,9 @@ class User {
   constructor (params = {}) {
     const definition = {
       "firstName": Option.as(M.string),
-      "lastName": Option.as(M.string)
+      "lastName": Option.as(M.string),
+      "address": M.instanceof(Address),
+      "email": M.string
     };
     const _this = this;
     M.parseObj(params).with(defintion).match({

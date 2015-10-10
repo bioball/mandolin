@@ -17,6 +17,13 @@ describe('Options', function(){
       expect(opt.get()).to.equal("foo");
     });
 
+    it('will flatMap', function(){
+      new Some("foo").flatMap((v) => new Some(v + "bar")).match({
+        Some (v) { expect(v).to.equal("foobar"); },
+        None () { throw new Error("Somehow got a None"); }
+      });
+    });
+
   });
 
   describe('None', function(){
@@ -31,6 +38,12 @@ describe('Options', function(){
       opt.map(function(){
         throw new Error();
       });
+    });
+  });
+
+  describe("Option.reads", function(){
+    it("reads null and undefined as None", function(){
+
     });
   });
 });

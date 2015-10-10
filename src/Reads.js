@@ -21,10 +21,6 @@ class Reads {
    * @return {Reads}
    */
   map (r) {
-    return new Reads(() => this.getValue().map(r.getValue));
-  }
-
-  flatMap (r) {
     return new Reads(() => this.getValue().flatMap(r.getValue));
   }
 
@@ -55,3 +51,5 @@ Reads.instance = function (T) {
     return new Left(v);
   });
 };
+
+module.exports = Reads;

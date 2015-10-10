@@ -1,5 +1,9 @@
+const utils = require('./utils');
+const Reads = require('./Reads');
+
 /**
  * @class Option
+ * @abstract
  * A monadic type for values that might not exist. Using option types will guarantee that you will not have null exception.
  * 
  * This library is heavily inpsired by Scala's native Option type.
@@ -7,6 +11,7 @@
 class Option {
 
   constructor (val = null) {
+    utils.abstractClassCheck(this, Option, "Option");
     this.val = val;
   }
 
@@ -62,7 +67,7 @@ class Option {
    */
   flatMap (f) {
     if (this.isSome()) {
-      return f(this.val());
+      return f(this.val);
     }
     return this;
   }
@@ -132,21 +137,18 @@ Option.reads = new Reads(function(val){
  * Option.as(new Reads((val) => val % 2 ? new Right(val) : new Left(val)))
  * 
  * @param  {Read} read A Reads for this type of value.
- * @return {Function}   The serializer function
+ * @return {Read}
  */
 Option.as = Option.as = function(read){
-  return Option.reads.flatMap(read);
-  // return new Reads(function(v){
-  //   return Option.reads.getValue(v).flatMap(read.getValue);
-  // });
+  return Option.reads.map(read);
+  return new Reads(function(v){
+    return Option.reads.getValue(v).flatMap(read.getValue);
+  });
 };
 
 class Some extends Option {
   constructor (val) {
     super(val);
-    if (!this instanceof Some) {
-      return new Some(val);
-    }
   }
 
   toJSON () {
@@ -157,9 +159,6 @@ class Some extends Option {
 class None extends Option {
   constructor () {
     super();
-    if (!this instanceof None) {
-      return new None();
-    }
   }
 
   toJSON () {

@@ -1,16 +1,18 @@
+const utils = require('./utils');
+
 /**
  * @class Either
+ * @abstract
+ * 
  * A disjoint union of Left and Right, and is right-biased. `map` and `flatMap` are only called if it is a Right. 
- * The difference between this and an Option, is that a Left can also hold values.
+ * This is similar to an Option, in that `Left : None :: Right : Some`. The difference is that a Left can also hold values.
  *
  * An Either does not hold two values. Rather, it holds one value, which is either a Left or a Right.
  */
 class Either {
 
   constructor (val = null) {
-    if (this instanceof Either) {
-      throw new Error("An Either type should be instantiated using `new Left()` or `new Right()`");
-    }
+    utils.abstractClassCheck(this, Either, "Either");
     this.val = val;
   }
 
@@ -22,28 +24,6 @@ class Either {
     return this instanceof Right;
   }
 
-  /**
-   * Serializes a value into an Either of its type.
-   *
-   * @example
-   * Either.as(String, String)("foo")
-   * // => Right("foo")
-   * Either.as(Number, String)(5)
-   * // => Left(5)
-   * 
-   */
-  as (A, B) {
-    return (val) => {
-      if (val instanceof B) {
-        return new Right(val);
-      }
-      if (val instanceof A) {
-        return new Left(val);
-      }
-      throw new Exception(`Could not serialize value %o as an Option of %{ T }`, val)
-    }
-  }
-
 
   /**
    * @private
@@ -52,7 +32,7 @@ class Either {
     if (this.isRight()) {
       return this.val;
     }
-    throw new Exception("Performed a get on a Left")
+    throw new Error("Performed a get on a Left");
   }
 
   /**
@@ -62,7 +42,7 @@ class Either {
     if (this.isLeft()) {
       return this.val;
     }
-    throw new Exception("Performed a getLeft on a Right")
+    throw new Error("Performed a getLeft on a Right");
   }
 
   /**
@@ -175,12 +155,8 @@ class Either {
    * 
    * @example
    * new Right(3).match({
-   *   Right (a) {
-   *     return a + 5;
-   *   },
-   *   Left () {
-   *     return 0;
-   *   }
+   *   Right (a) { return a + 5; },
+   *   Left () { return 0; }
    * });
    * // => 8
    */
@@ -190,12 +166,28 @@ class Either {
 
 }
 
+/**
+ * @todo
+ * Really not sure if there should be a default rule around reading in an Either.
+ */
+Either.reads = function(){
+
+};
+
+/**
+ * @class Left
+ * @implements {Either}
+ */
 class Left extends Either {
   constructor (val) {
     super(val);
   }
 }
 
+/**
+ * @class Right
+ * @implements {Either}
+ */
 class Right extends Either {
   constructor (val) {
     super(val);
