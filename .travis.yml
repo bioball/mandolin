@@ -1,8 +1,4 @@
 language: node_js
 
-before_install:
-- npm install -g babel
-- npm install -g browserify
-
 script:
 - npm test
