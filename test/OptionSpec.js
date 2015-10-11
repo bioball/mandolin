@@ -1,6 +1,6 @@
 const { expect } = require('chai');
-const { Option, Some, None } = require('../src/Option');
-const Reads = require('../src/Reads');
+const M = require('../');
+const { Option, Some, None, Reads, Right } = M;
 
 describe('Option', function(){
 
@@ -73,7 +73,7 @@ describe('Option', function(){
     });
 
     it("can compose with another Reads", function(){
-      const optString = Option.as(Reads.string);
+      const optString = Option.as(M.string);
       optString.getValue("foo").match({
         Left (err) { throw err; },
         Right (v) { expect(v.get()).to.equal("foo") }
@@ -81,7 +81,7 @@ describe('Option', function(){
     });
 
     it("returns a Left(None) if the other Reads fails", function(){
-      const optString = Option.as(Reads.string);
+      const optString = Option.as(M.string);
       optString.getValue(3).match({
         Right (v) { 
           console.log("got value: " + v);

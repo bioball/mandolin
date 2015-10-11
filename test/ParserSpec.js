@@ -1,8 +1,7 @@
-const Parser = require('../src/Parser');
 const utils = require('../src/internal/utils');
-const M = utils.extend({}, require('../src/Reads'), Parser);
-const { Option } = require('../src/Option');
 const { expect } = require('chai');
+const M = require('../');
+const { Parser, Option } = M;
 
 describe('Parser', function(){
   it('is a thing', function(){

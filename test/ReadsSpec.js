@@ -1,5 +1,4 @@
-const Reads = require('../src/Reads');
-const { Either, Left, Right } = require('../src/Either');
+const { Either, Left, Right, Reads } = require('../');
 const { expect } = require('chai');
 
 describe('Reads', function(){
@@ -12,7 +11,6 @@ describe('Reads', function(){
     expect(Reads).to.respondTo('map');
     expect(Reads).to.respondTo('flatMap');
     expect(Reads).to.respondTo('getValue');
-    expect(Reads).itself.to.respondTo('instance')
   });
 
   it('can take a reader, and run the result', function(){

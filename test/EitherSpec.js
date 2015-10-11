@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { Either, Left, Right } = require('../src/Either');
+const { Either, Left, Right } = require('../');
 
 describe('Either', function(){
 

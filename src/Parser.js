@@ -84,10 +84,6 @@ class Parser extends Reads {
       });
     }, new Right({}));
   }
-}
-
-Parser.define = Parser.unit = function(definition){
-  return new Parser(definition);
 };
 
 module.exports = Parser;

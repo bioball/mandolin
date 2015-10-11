@@ -1,10 +1,8 @@
 const { Option, Some, None } = require('./src/Option');
-const { Either, Left, Right } = require('./src/Future');
+const { Either, Left, Right } = require('./src/Either');
 const Parser = require('./src/Parser');
 const Reads = require('./src/Reads');
-const utils = require('./src/internals/utils');
+const utils = require('./src/internal/utils');
+const utility = require('./src/utility');
 
-module.exports = { Option, Some, None, Either, Left, Right, Parser, Reads };
-
-// Apply helper methods onto the main export. This adds `define`, `string`, `boolean`, etc.
-utils.extend(module.exports, Reads, Parser);
+module.exports = utils.extend(utility, { Option, Some, None, Either, Left, Right, Parser, Reads });

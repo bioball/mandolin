@@ -78,46 +78,4 @@ class Reads {
 
 Reads.unit = (reader) => new Reader(reader);
 
-Reads.instance = function (T) {
-  return new Reads(function (v) {
-    if (v instanceof T) {
-      return new Right(v);
-    }
-    return new Left(new Error(`Expected an instance of ${ T }, but instead got ${ v }`));
-  });
-};
-
-/**
- * Define baked-in Reads for JavaScript primitives.
- *
- * Reads.string
- * Reads.boolean
- * Reads.number
- * Reads.object
- * Reads.undefined
- * Reads.null
- */
-[
-  "string",
-  "boolean",
-  "number",
-  "object",
-  "null",
-  "undefined"
-].forEach((t) => {
-  Reads[t] = new Reads(function (v) {
-    if (typeof v === t) {
-      return new Right(v);
-    }
-    return new Left(new Error(`Attempted to read value as ${ utils.capitalize(t) }, but instead got ${ v }`));
-  });
-});
-
-Reads.array = new Reads(function (v) {
-  if (Array.isArray(v)) {
-    return new Right(v);
-  }
-  return new Left(new Error(`Attempted to read value as Array, but instead got ${ v }`));
-});
-
 module.exports = Reads;
