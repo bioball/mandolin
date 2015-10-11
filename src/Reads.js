@@ -35,6 +35,13 @@ class Reads {
   }
 
   /**
+   * Compose one read with another.
+   */
+  chain (r) {
+    return this.flatMap(r.getValue);
+  }
+
+  /**
    * Return the result of running the reader.
    * @return {Either}
    */
@@ -60,7 +67,8 @@ Reads.instance = function (T) {
  * Reads.boolean
  * Reads.number
  * Reads.object
- * Reads.
+ * Reads.undefined
+ * Reads.null
  */
 [
   "string",

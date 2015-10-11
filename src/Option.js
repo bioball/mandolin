@@ -113,6 +113,10 @@ class Option {
     return this.map(Some).getOrElse(None);
   }
 
+  toJSON () {
+    return this.val;
+  }
+
 }
 
 /**
@@ -145,13 +149,15 @@ Option.as = function(read){
   return Option.reads.map((opt) => opt.flatMap(read.getValue));
 };
 
+/**
+ * @class Some. 
+ * Holds a value, but has no opinion on what that value is. The value can even be undefined.
+ * 
+ * @augments {Option}
+ */
 class Some extends Option {
   constructor (val) {
     super(val);
-  }
-
-  toJSON () {
-    return this.val;
   }
 
   toString () {
@@ -159,13 +165,15 @@ class Some extends Option {
   }
 }
 
+/**
+ * @class None
+ * Holds no value.
+ *
+ * @augments {Option}
+ */
 class None extends Option {
   constructor () {
     super();
-  }
-
-  toJSON () {
-    return null;
   }
 
   toString () {

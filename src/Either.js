@@ -158,33 +158,37 @@ class Either {
     return this.map(Right).getOrElse(Left);
   }
 
+  toJSON () {
+    return this.val;
+  }
+
 }
 
 /**
- * @todo
- * Really not sure if there should be a default rule around reading in an Either.
- */
-Either.reads = function(){
-
-};
-
-/**
  * @class Left
- * @implements {Either}
+ * @augments {Either}
  */
 class Left extends Either {
   constructor (val) {
     super(val);
   }
+
+  toString () {
+    return `Left(${ this.val })`;
+  }
 }
 
 /**
  * @class Right
- * @implements {Either}
+ * @augments {Either}
  */
 class Right extends Either {
   constructor (val) {
     super(val);
+  }
+
+  toString () {
+    return `Right(${ this.val })`;
   }
 }
 

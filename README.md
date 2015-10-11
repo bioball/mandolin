@@ -2,6 +2,10 @@
 
 This is an attempt to make Monadic types practical in JavaScript. This is heavily inspired by Scala.
 
+### Requirements
+
+If you need to support legacy browsers, you should include an ES5 shim in your codebase.
+
 ### Ideas
 
 #### Faux-pattern matching
@@ -177,7 +181,7 @@ class User {
       "email": M.string
     };
     const _this = this;
-    M.parseObj(params).with(defintion).match({
+    M.define(definition).parse(params).match({
       Right (user) { _.extend(_this, user); },
       Left (err) { throw err; }
     });
