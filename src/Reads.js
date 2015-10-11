@@ -1,10 +1,3 @@
-// This should be freely composable. e.g.
-// const r = new Reads(function(v){ return new Right(v) });
-// const s = new Reads(function(v){ return new Right(v) });
-// r.map(s)
-// 
-// Calls to `map` and `flatMap` are lazy. They don't do anything until `getValue` is called.
-
 const { Left, Right } = require('./Either');
 
 class Reads {

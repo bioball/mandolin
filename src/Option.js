@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('./internal/utils');
 const Reads = require('./Reads');
 const { Left, Right } = require('./Either');
 

@@ -1,5 +1,5 @@
 const { Either, Left, Right } = require('./Either');
-const utils = require('./utils');
+const utils = require('./internal/utils');
 const Reads = require('./Reads');
 
 /**

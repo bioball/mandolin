@@ -1,5 +1,5 @@
 const Parser = require('../src/Parser');
-const utils = require('../src/utils');
+const utils = require('../src/internal/utils');
 const M = utils.extend({}, require('../src/Reads'), Parser);
 const { Option } = require('../src/Option');
 const { expect } = require('chai');
