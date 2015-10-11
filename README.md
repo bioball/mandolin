@@ -1,5 +1,7 @@
 # Monadia
 
+[![Build Status](https://travis-ci.org/bioball/monadia.svg)](https://travis-ci.org/bioball/monadia)
+
 This is an attempt to make Monadic types practical in JavaScript. This is heavily inspired by Scala.
 
 ### Requirements
