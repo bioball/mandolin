@@ -1,11 +1,11 @@
 const utils = require('./internal/utils');
 const Reads = require('./Reads');
-const { Left, Right } = require('./Either');
+const { Left, Right, Either } = require('./Either');
 
 /**
  * @class Option
  * @abstract
- * A monadic type for values that might not exist. Using option types will guarantee that you will not have null exception.
+ * A monadic type for values that might not exist. Using Options eliminates the need to use a null value.
  * 
  * This library is heavily inpsired by Scala's native Option type.
  */
@@ -64,7 +64,18 @@ class Option {
    */
   flatMap (f) {
     if (this.isSome()) {
-      return f(this.val);
+      return this.map(f).flatten();
+    }
+    return this;
+  }
+
+  /**
+   * Turns Option(Option<A>) into Option<A>. Will not flatten deeply.
+   * @return {Option}
+   */
+  flatten () {
+    if (this.isSome() && this.get() instanceof Option) {
+      return this.get();
     }
     return this;
   }
@@ -111,6 +122,17 @@ class Option {
 
   toJSON () {
     return this.val;
+  }
+
+  /**
+   * Coerce this to an Either. A Some becomes a Right, a None becomes a Left with no value.
+   * @return {Either<null, A>}
+   */
+  toEither () {
+    return this.match({
+      Some (val) { return new Right(val) },
+      None () { return new Left() }
+    });
   }
 
 }

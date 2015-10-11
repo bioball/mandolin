@@ -75,7 +75,7 @@ class Either {
    */
   flatMap (f) {
     if (this.isRight()) {
-      return f(this.val);
+      return this.map(f).flatten();
     }
     return this;
   }
@@ -105,27 +105,25 @@ class Either {
    */
   flatMapLeft (f) {
     if (this.isLeft()) {
-      return f(this.val);
+      return this.mapLeft(f).flatten();
+    }
+    return this;
+  }
+
+  /**
+   * Turns an Either<Either> to an Either.
+   */
+  flatten () {
+    if (this.isRight() && this.get() instanceof Either) {
+      return this.get();
+    }
+    if (this.isLeft() && this.getLeft() instanceof Either) {
+      return this.getLeft();
     }
     return this;
   }
 
 
-  /**
-   * Cast this to a Right.
-   * @return {Right}
-   */
-  toRight () {
-    return new Right(this.val);
-  }
-
-  /**
-   * Cast this to a Left.
-   * @return {Left}
-   */
-  toLeft () {
-    return new Left(this.val);
-  }
 
   /**
    * If Left, switch to Right. If Right, switch to left.
@@ -161,6 +159,36 @@ class Either {
     return this.val;
   }
 
+  /**
+   * Cast this to a Right.
+   * @return {Right}
+   */
+  toRight () {
+    return new Right(this.val);
+  }
+
+  /**
+   * Cast this to a Left.
+   * @return {Left}
+   */
+  toLeft () {
+    return new Left(this.val);
+  }
+
+  /**
+   * Cast this to an Option type. A Left becomes a None, a Right becomes a Some.
+   * If this is a Left, the value will be lost.
+   * 
+   * @return {Option}
+   */
+  toOption () {
+    const { Option, Some, None } = require('./Option');
+    return this.match({
+      Left () { return new None() },
+      Right(val) { return new Some(val) }
+    });
+  }
+
 }
 
 Either.unit = function(v) {
@@ -173,9 +201,15 @@ Either.unit = function(v) {
  *
  * @example
  * const readAsError = Reads.unit((v) => Right.unit(new Error(v)))
- * M.define({
+ * const definition = M.define({
  *   foo: Either.as(readAsError, M.number)
  * })
+ *
+ * definition.parse({ foo: 5 })
+ * // => Right(Right(5))
+ * definition.parse({ foo: "blah" })
+ * // => Right(Left(Error("blah")))
+ * 
  * 
  * @param  {Reads} readLeft  The Reads for the left
  * @param  {Reads} readRight The Reads for the right
@@ -186,7 +220,7 @@ Either.as = (readLeft, readRight) => {
   return new Reads((v) => {
     return readRight
       .map(Right.unit)
-      .flatMapLeft(() => readLeft.getValue(v));
+      .flatMapLeft(() => readLeft.getValue(v).map(Left.unit));
   });
 };
 
