@@ -141,13 +141,12 @@ Option.reads = new Reads(function(val){
  * @param  {Read} read A Reads for this type of value.
  * @return {Read}
  */
-Option.as = function(read){
-  return Option.reads.map((opt) => opt.flatMap(read.getValue));
-};
+Option.as = (read) => read.map(Some.unit).mapLeft(None.unit);
 
-Option.unit = function(val){
-  return new Some(val);
-};
+/**
+ * Wrap a value in a Some
+ */
+Option.unit = (val) => new Some(val);
 
 /**
  * @class Some. 
@@ -165,6 +164,8 @@ class Some extends Option {
   }
 }
 
+Some.unit = (val) => new Some(val);
+
 /**
  * @class None
  * Holds no value.
@@ -180,5 +181,7 @@ class None extends Option {
     return "None()";
   }
 }
+
+None.unit = () => new None();
 
 module.exports = { Option, Some, None };

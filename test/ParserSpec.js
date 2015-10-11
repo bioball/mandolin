@@ -68,6 +68,35 @@ describe('Parser', function(){
     M.define(definition).parse({ "Admiral": 3 }).match({
       Right (admiral) { throw admiral; },
       Left (err) { console.log(err); }
-    })
+    });
   });
+
+  // it('will track the path of the error in deeply nested objects', function(){
+  //   const foo = M.define({
+  //     bar: M.define({
+  //       baz: M.define({
+  //         biz: M.define({
+  //           qux: M.string
+  //         })
+  //       })
+  //     })
+  //   });
+
+  //   foo.parse({
+  //     bar: {
+  //       baz: {
+  //         biz: {
+  //           qux: 5
+  //         }
+  //       }
+  //     }
+  //   }).match({
+  //     Left (err) {
+  //       console.log(err.message);
+  //       expect(err.message).to.match(/obj\.bar\.baz\.biz\.qux/)
+  //     },
+  //     Right (obj) { throw obj; }
+  //   })
+
+  // })
 });

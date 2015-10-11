@@ -80,6 +80,19 @@ describe('Option', function(){
       });
     });
 
+    it("returns a Left(None) if the other Reads fails", function(){
+      const optString = Option.as(Reads.string);
+      optString.getValue(3).match({
+        Right (v) { 
+          console.log("got value: " + v);
+          throw v;
+        },
+        Left (err) {
+          console.log(err + "");
+        }
+      })
+    });
+
   });
 
   describe("deserializing", function(){

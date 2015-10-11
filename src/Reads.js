@@ -1,4 +1,5 @@
 const { Left, Right } = require('./Either');
+const utils = require('./internal/utils');
 
 class Reads {
   /**
@@ -29,12 +30,40 @@ class Reads {
   }
 
   /**
+   * Compose on an unsuccessful read.
+   * @param  {(A) => A} r The next reader to perform
+   * @return {Reads}
+   */
+  mapLeft (f) {
+    return new Reads((v) => this.getValue(v).mapLeft(f))
+  }
+
+  /**
+   * Compose on an unsuccessful read.
+   * @param  {(A) => Either<A>} r The next reader to perform
+   * @return {Reads}
+   */
+  flatMapLeft (f) {
+    return new Reads((v) => this.getValue(v).flatMapLeft(f))
+  }
+
+
+  /**
    * Compose one read with another.
    * @param {Reads} r 
    * @return {Reads}
    */
   chain (r) {
     return this.flatMap(r.getValue);
+  }
+
+  /**
+   * Compose one read with another on the left.
+   * @param {Reads} r 
+   * @return {Reads}
+   */
+  chainLeft (r) {
+    return this.flatMapLeft(r.getValue);
   }
 
   /**
@@ -47,12 +76,14 @@ class Reads {
 
 }
 
+Reads.unit = (reader) => new Reader(reader);
+
 Reads.instance = function (T) {
   return new Reads(function (v) {
     if (v instanceof T) {
       return new Right(v);
     }
-    return new Left(v);
+    return new Left(new Error(`Expected an instance of ${ T }, but instead got ${ v }`));
   });
 };
 
@@ -78,7 +109,7 @@ Reads.instance = function (T) {
     if (typeof v === t) {
       return new Right(v);
     }
-    return new Left(new Error(`Attempted to read value as ${ t.toUpperCase() }, but instead got ${ v }`));
+    return new Left(new Error(`Attempted to read value as ${ utils.capitalize(t) }, but instead got ${ v }`));
   });
 });
 

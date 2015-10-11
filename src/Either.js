@@ -168,6 +168,29 @@ Either.unit = function(v) {
 };
 
 /**
+ * Read in an either, given a Reads for the left, and a Reads for the right. 
+ * If the reads for the right returns a Left, it will return the Reads for the left.
+ *
+ * @example
+ * const readAsError = Reads.unit((v) => Right.unit(new Error(v)))
+ * M.define({
+ *   foo: Either.as(readAsError, M.number)
+ * })
+ * 
+ * @param  {Reads} readLeft  The Reads for the left
+ * @param  {Reads} readRight The Reads for the right
+ * @return {Reads}
+ */
+Either.as = (readLeft, readRight) => {
+  const Reads = require('./Reads');
+  return new Reads((v) => {
+    return readRight
+      .map(Right.unit)
+      .flatMapLeft(() => readLeft.getValue(v));
+  });
+};
+
+/**
  * @class Left
  * @augments {Either}
  */
@@ -180,6 +203,8 @@ class Left extends Either {
     return `Left(${ this.val })`;
   }
 }
+
+Left.unit = (v) => new Left(v);
 
 /**
  * @class Right
@@ -194,5 +219,7 @@ class Right extends Either {
     return `Right(${ this.val })`;
   }
 }
+
+Right.unit = (v) => new Right(v);
 
 module.exports = { Either, Left, Right };
