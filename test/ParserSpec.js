@@ -1,14 +1,8 @@
 const Parser = require('../src/Parser');
-const M = require('../src/Reads');
+const utils = require('../src/utils');
+const M = utils.extend({}, require('../src/Reads'), Parser);
 const { Option } = require('../src/Option');
 const { expect } = require('chai');
-
-/**
- * @todo Actually provide this in the library somewhere
- */
-M.define = function(def){
-  return new Parser(def);
-}
 
 describe('Parser', function(){
   it('is a thing', function(){
@@ -67,5 +61,13 @@ describe('Parser', function(){
         throw err;
       }
     })
-  })
+  });
+
+  it('will error if one of its reads fails', function(){
+    const definition = { "Admiral": M.string };
+    M.define(definition).parse({ "Admiral": 3 }).match({
+      Right (admiral) { throw admiral; },
+      Left (err) { console.log(err); }
+    })
+  });
 });

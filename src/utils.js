@@ -4,9 +4,12 @@ module.exports.abstractClassCheck = (currentThis, target, name) => {
   }
 };
 
-module.exports.extend = (obj1, obj2) => {
-  for (var key in obj2) {
-    obj1[key] = obj2[key];
-  }
-  return obj1;
+module.exports.extend = (obj1, ...rest) => {
+  const extendOnce = (a, b) => {
+    for (var key in b) {
+      a[key] = b[key];
+    }
+    return a;
+  };
+  return rest.reduce((acc, obj) => extendOnce(acc, obj), obj1);
 };

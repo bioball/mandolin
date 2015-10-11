@@ -5,19 +5,25 @@ const Reads = require('./Reads');
 /**
  * Responsible for taking an object of key -> Read pairs, and parsing an object out.
  *
- * A Parser is just a Reads, that has special rules around how it handles `getValue`.
+ * A Parser is just a Reads, that has special rules around how it handles `getValue`. Parsers can be nested.
  * 
  * @example
  * const definition = {
  *   "firstName": M.string,
  *   "lastName": M.string,
- *   "email": Option.as(M.string)
+ *   "email": Option.as(M.string),
+ *   "address": new Parser({
+ *     "street1": M.string
+ *   })
  * }
  *
  * new Parser(definition).parse({
  *  "firstName": "Bob",
  *  "lastName": "Cassidy",
- *  "email": null
+ *  "email": null,
+ *  "address": {
+ *    "street1": "123 Fake St"
+ *  }
  * }).map((obj) => console.log(obj))
  * // => { "firstName": "Bob", "lastName": "Cassidy", "email": None() }
  */
@@ -49,7 +55,10 @@ class Parser extends Reads {
       });
     }, new Right({}));
   }
-
 }
+
+Parser.define = function(definition){
+  return new Parser(definition);
+};
 
 module.exports = Parser;
