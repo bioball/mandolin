@@ -53,10 +53,16 @@ class Parser extends Reads {
     return new Parser(this.definition, this.path.concat([name]));
   }
 
+  /**
+   * @private
+   */
   getRead (read, key) {
     return read instanceof Parser ? read.setPath(key) : read;
   }
 
+  /**
+   * @private
+   */
   applyErrorPath (key) {
     return (err) => {
       const route = this.path.concat([key]).join(".");
@@ -65,8 +71,8 @@ class Parser extends Reads {
   }
 
   /**
-   * @param  {Object} target [description]
-   * @return {Either}        [description]
+   * @param  {Object} target  The object that needs to be parsed
+   * @return {Either<Error, A>}
    */
   parse (target = {}) {
     return utils.reduce(Object.keys(this.definition), (result, key) => {

@@ -1,16 +1,35 @@
+/**
+ * @fileOverview 
+ * Utility toolbelt. This is where M.define, M.string, M.instance, etc, are defined.
+ */
 const Reads = require('./Reads');
 const Parser = require('./Parser');
 const utils = require('./internal/utils');
 const { Either, Left, Right } = require('./Either');
 
-/**
- * Utility toolbelt. This is where M.define, M.string, M.instance, etc, are defined.
- */
 
+/**
+ * Return a new parser with a definition.
+ *
+ * @example
+ * M.define({
+ *   foo: M.define({
+ *     bar: M.string
+ *   })
+ * })
+ * 
+ * @param  {Object} definition An object of key-value pairs. Each value needs to be a Reads.
+ * @return {Parser}
+ */
 module.exports.define = function(definition){
   return new Parser(definition);
 };
 
+/**
+ * Return a reads that performs an instanceof check.
+ * @param  {Constructor} T
+ * @return {Reads}
+ */
 module.exports.instance = function (T) {
   return new Reads(function (v) {
     if (v instanceof T) {
@@ -23,12 +42,13 @@ module.exports.instance = function (T) {
 /**
  * Define baked-in Reads for JavaScript primitives.
  *
- * Reads.string
- * Reads.boolean
- * Reads.number
- * Reads.object
- * Reads.undefined
- * Reads.null
+ * M.string
+ * M.boolean
+ * M.number
+ * M.object
+ * M.undefined
+ * M.null
+ * M.array
  */
 utils.each([
   "string",
