@@ -11,7 +11,6 @@ describe('Option', function(){
   it("has these methods", function(){
     expect(Option).to.respondTo("isSome");
     expect(Option).to.respondTo("isNone");
-    expect(Option).to.respondTo("unit");
     expect(Option).to.respondTo("get");
     expect(Option).to.respondTo("map");
     expect(Option).to.respondTo("flatMap");

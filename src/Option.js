@@ -24,10 +24,6 @@ class Option {
     return this instanceof None;
   }
 
-  unit () {
-    return new Option(this.val);
-  }
-
   /**
    * @private
    */
@@ -147,6 +143,10 @@ Option.reads = new Reads(function(val){
  */
 Option.as = function(read){
   return Option.reads.map((opt) => opt.flatMap(read.getValue));
+};
+
+Option.unit = function(val){
+  return new Some(val);
 };
 
 /**

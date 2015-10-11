@@ -57,7 +57,7 @@ class Parser extends Reads {
   }
 }
 
-Parser.define = function(definition){
+Parser.define = Parser.unit = function(definition){
   return new Parser(definition);
 };
 

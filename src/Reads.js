@@ -22,6 +22,7 @@ class Reads {
   /**
    * Compose on a successful read.
    * @param  {(A) => Either} r The next reader to perform
+   * @return {Reads}
    */
   flatMap (f) {
     return new Reads((v) => this.getValue(v).flatMap(f));
@@ -29,6 +30,8 @@ class Reads {
 
   /**
    * Compose one read with another.
+   * @param {Reads} r 
+   * @return {Reads}
    */
   chain (r) {
     return this.flatMap(r.getValue);

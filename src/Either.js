@@ -24,7 +24,6 @@ class Either {
     return this instanceof Right;
   }
 
-
   /**
    * @private
    */
@@ -163,6 +162,10 @@ class Either {
   }
 
 }
+
+Either.unit = function(v) {
+  return new Right(v);
+};
 
 /**
  * @class Left
