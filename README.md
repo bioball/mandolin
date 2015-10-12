@@ -2,191 +2,70 @@
 
 [![Build Status](https://travis-ci.org/bioball/monadia.svg)](https://travis-ci.org/bioball/monadia)
 
-This is an attempt to make Monadic types practical in JavaScript. This is heavily inspired by Scala.
+This is a library of Monads in JavaScript. The intent of this library is to provide Monads, as well as a great way to interop between Monadic types and vanilla JS types.
 
-### Requirements
+In this library, the monadic `bind` is called `flatMap`, in order to not conflict with `Function.prototype.bind`. The monadic `return` is called `unit`, to not cause any confusion with the `return` keyword.
 
-If you need to support legacy browsers, you should include an ES5 shim in your codebase.
+## What is a monad?
 
-### Ideas
+In brief, a Monad is a wrapper around a value that allows you to make safe, composable operations. It eliminates the need to throw errors, as well as the need for things like `null` values.
 
-#### Faux-pattern matching
+Monads are common in functional programming languages.
 
-In Scala, you can create partial functions that match based on type, like so:
+Here are some great resources that discuss monads:
+
+* [Brian Beckman: Don't Fear The Monad](https://www.youtube.com/watch?v=ZhuHCtR3xq8)
+* [James Coglan: Promises are the monad of asynchronous programming](https://blog.jcoglan.com/2011/03/11/promises-are-the-monad-of-asynchronous-programming/)
+* [Douglas Crockford: Monads and Gonads](https://www.youtube.com/watch?v=b0EF0VTs9Dc)
+
+## Available monads
+
+* [Option](#option)
+* [Either](#either)
+
+### Option
+
+An `Option` is a type comprising of `Some` and `None`. A value of type `Option` can either be a `Some`, in which it holds a value, or a `None`, in which it holds no value. This is used in lieu of `null` and `undefined`.
+
+Example:
+
+```js
+const bobsEmail = new Some("bob@mcadoo.com");
+// This is bob's email
+const sandrasEmail = new None();
+// we do not have Sandra's email
+```
+
+The way to get a reference to the actual value is through either `map`, `flatMap` or `match`.
+
+```js
+bobsEmail.map((email) => doThingWithEmail(email));
+```
+
+This is similar to writing a null check:
+
+```js
+if (email !== null || email !== undefined) {
+  doThingWithEmail(email)
+}
+```
+
+### Either
+
+A disjoint union of `Left` and `Right`, and is right-biased. `map` and `flatMap` are only called if it is a Right. This is similar to an `Option`, in that `Left : None :: Right : Some`. The difference is that a `Left` can also hold values.
+
+## Types
+
+This library makes no assumptions about type safety. The approach, rather, is to use Reads combinators to serialize monads that follow certain sets of rules. For example, in Scala, an Option of a string is notated as such:
 
 ```scala
-foo match {
-  case Some(bar) => ???
-  case None => ???
-}
+Option[String]
 ```
 
-This is pretty useful for when working with algebraic types. Although we don't have such syntax in JavaScript, it's possible to do something like this:
+The seemingly equivalent example in our library is this:
 
 ```js
-foo().match({
-  Some (bar) { ... },
-  None () { ... }
-})
+Option.as(M.string)
 ```
 
-The drawbacks are the lack of compile-time syntax and type checks. However, it does make using Options more practical. In the same vein, here's faux-pattern matching for an `Either`.
-
-```js
-foo().match({
-  Left (bar) { ... },
-  Right (baz) { ... }
-})
-```
-
-
-#### Creating class objects
-
-I think things like Option types are totally useless unless there's an easy way to interop with vanilla JS objects. There needs to be some repeatable way to serialize and deserialize out of our monadic types. For example:
-
-```json
-{
-  "foo": "bar",
-  "biz": null
-}
-```
-
-Should serialize into:
-
-```js
-{
-  "foo": Some("bar"),
-  "biz": None
-}
-```
-
-My suggestion is to have a method that creates constructors, given a type definition. For example, you should be able to do this:
-
-```js
-const Person = createClass({
-  firstName: Some.as(String),
-  lastName: Some.as(String)
-}).withPrototype({
-  fullName () { ... }
-})
-```
-
-Then once you have instantiated a `Person`, you'd be able to either `new` it up, or parse a JS object as a `Person`.
-
-```js
-Person.parseFromJsObj({
-  firstName: null,
-  lastName: null
-});
-// => Person({
-//  firstName: None,
-//  lastName: None
-// })
-```
-
-Naturally, they would deserialize back into JSON as well.
-
-
-### Further thoughts
-
-A serious problem coming up is primitive types in JavaScript don't necessary behave as instances of their constructor. For instance:
-
-```js
-"foo" instanceof String
-// => false
-```
-
-My initial thought to implementing classes with type definitions was to just use a bunch of `instanceof` checks, so you can pass their constructors in. That clearly doesn't work, so the syntax of `createClass({ firstName: String })` isn't going to cut it.
-
-My revised approach is to do something like this:
-
-```js
-const Person = createClass({
-  "firstName": M.string,
-  "lastName": M.string
-});
-```
-
-`M` is just a placeholder reference until I figure out a name for this project. `M.string` wouldn't be a reference to the `String` constructor, but a `Reads` object for the `String` type. This is another inspiration from Scala.
-
-Here's a possible implementation for a `Reads`
-
-```js
-class Reads {
-  constructor (reader) {
-    this.reader = reader;
-  }
-  getValue (val) {
-    return this.reader(val);
-  }
-}
-
-M.string = new Reads(function(val){
-  if (typeof val !== "string") {
-    return new Left("Attempted to read %o as a String value", val)
-  }
-  return new Right(val);
-});
-```
-
-All of JavaScript's primitives would have a pre-baked Reads for them--`Number`, `Boolean`, `String`, etc. 
-
-For class types, each of my monadic types could be defined via this syntax
-
-```js
-createClass({
-  email: Option.as(M.string)
-})
-```
-
-Implementation:
-
-```js
-Option.as = function(read){
-  return new Reads(function(val){
-    if (val === null || val === undefined) {
-      return None();
-    }
-    return new Some(read.getValue(val));
-  });
-};
-```
-
-Each algebraic type will need to define its own `as` function, because the rules for deserialization are different.
-
-**Further thoughts**: What should deserialization look like for an `Either`? Given there might be the same type for `Left` and `Right`?
-
-
-### More thoughts as of 10/9
-
-I'm starting to think that having a generic class constructor is too opinionated in JavaScript-land. Especially if we're interacting with some framework, this opinionated approach quickly becomes a problem. For example, React wants you to use their own constructor for creating React elements.
-
-```js
-React.createClass({
-  render () { ... }
-})
-```
-
-I can see a Monadia `createClass` method quickly becoming muddy.
-
-A better approach is to just provide parsers and serializers that take vanilla JS objects, maps `Read` over them, and hands its right back. I think this reduces the pain points of integrating with my library.
-
-With only providing parsers and serializers, here's what an integration might look like:
-
-```js
-class User {
-  constructor (params = {}) {
-    const definition = {
-      "firstName": Option.as(M.string),
-      "lastName": Option.as(M.string),
-      "address": M.instanceof(Address),
-      "email": M.string
-    };
-    const _this = this;
-    M.define(definition).parse(params).match({
-      Right (user) { _.extend(_this, user); },
-      Left (err) { throw err; }
-    });
-  }
-}
-```
+The difference is, `Option.as(M.String)` is not a type, but a rule for reading in values. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any type checking.
