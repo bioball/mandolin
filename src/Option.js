@@ -135,6 +135,17 @@ class Option {
     });
   }
 
+  /**
+   * Cast this to a Promise. A None becomes a Promise rejection, a Some becomes a Promise resolve.
+   * @return {Promise}
+   */
+  toPromise () {
+    return this.match({
+      None () { return Promise.reject(); },
+      Some (val) { return Promise.resolve(val); }
+    });
+  }
+
 }
 
 /**

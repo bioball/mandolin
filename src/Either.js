@@ -189,6 +189,17 @@ class Either {
     });
   }
 
+  /**
+   * Cast this to a Promise. A Left becomes a Promise rejection, a Right becomes a Promise resolve.
+   * @return {Promise}
+   */
+  toPromise () {
+    return this.match({
+      Left (val) { return Promise.reject(val); },
+      Right (val) { return Promise.resolve(val); }
+    });
+  }
+
 }
 
 Either.unit = function(v) {
