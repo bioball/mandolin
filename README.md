@@ -1,6 +1,4 @@
-# Monadia
-
-[![Build Status](https://travis-ci.org/bioball/monadia.svg)](https://travis-ci.org/bioball/monadia)
+# Mandolin
 
 This is a library of Monads in JavaScript. The intent of this library is to provide Monads, as well as a great way to interop between Monadic types and vanilla JS types.
 

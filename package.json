@@ -1,5 +1,5 @@
 {
-  "name": "monadia",
+  "name": "mandolin",
   "version": "0.0.0",
   "description": "This is an attempt to make Monadic types practical in JavaScript. This is heavily inspired by Scala.",
   "main": "index.js",
@@ -21,12 +21,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bioball/monadia.git"
+    "url": "https://github.com/bioball/mandolin.git"
   },
   "author": "Daniel Chao (http://dchao.co/)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bioball/monadia/issues"
+    "url": "https://github.com/bioball/mandolin/issues"
   },
-  "homepage": "https://github.com/bioball/monadia"
+  "homepage": "https://github.com/bioball/mandolin"
 }

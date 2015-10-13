@@ -1,8 +1,8 @@
 /**
- * Monadia
+ * Mandolin
  * @author Daniel Chao
  *
- * Monadia is a library that provides Monadic data types, as well as an easy way to interop with them.
+ * Mandolin is a library that provides Monadic data types, as well as an easy way to interop with them.
  */
 
 const { Option, Some, None } = require('./dist/Option');
