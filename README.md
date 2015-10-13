@@ -8,7 +8,7 @@ In this library, the monadic `bind` is called `flatMap`, in order to not conflic
 
 ## What is a monad?
 
-In brief, a Monad is a wrapper around a value that allows you to make safe, composable operations. It eliminates the need to throw errors, as well as the need for things like `null` values.
+In brief, a Monad is a wrapper around a value that allows you to make safe, composable operations. It eliminates the need to throw errors, as well as the need for things like `null` values. A JavaScript `Array` is a monad-like data type, but doesn't fully satisfy the rules of being a monad, given that it doesn't have a `bind` (or `flatMap`) function.
 
 Monads are common in functional programming languages.
 
@@ -31,7 +31,7 @@ Example:
 
 ```js
 const bobsEmail = new Some("bob@mcadoo.com");
-// This is bob's email
+// We have Bob's email
 const sandrasEmail = new None();
 // we do not have Sandra's email
 ```
@@ -52,11 +52,11 @@ if (email !== null || email !== undefined) {
 
 ### Either
 
-A disjoint union of `Left` and `Right`, and is right-biased. `map` and `flatMap` are only called if it is a Right. This is similar to an `Option`, in that `Left : None :: Right : Some`. The difference is that a `Left` can also hold values.
+A disjoint union of `Left` and `Right`, and is right-biased. `map` and `flatMap` are only called if it is a `Right`. This is similar to an `Option`, in that `Left : None :: Right : Some`. The difference is that a `Left` can also hold values.
 
 ## Types
 
-This library makes no assumptions about type safety. The approach, rather, is to use Reads combinators to serialize monads that follow certain sets of rules. For example, in Scala, an Option of a string is notated as such:
+This library makes no assumptions about type safety. The approach, rather, is to use Reads combinators to serialize monads that follow certain sets of rules. For example, in Scala, an `Option` of a `String` is notated as such:
 
 ```scala
 Option[String]
@@ -68,4 +68,17 @@ The seemingly equivalent example in our library is this:
 Option.as(M.string)
 ```
 
-The difference is, `Option.as(M.String)` is not a type, but a rule for reading in values. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any type checking.
+The difference is, `Option.as(M.String)` is not a type, but a rule for reading in values. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any compile-time type checking.
+
+## Pattern Matching
+
+JavaScript doesn't have pattern matching built into the language. However, each algebraic data type in this library comes with a `match` function that behaves like pattern matching.
+
+```js
+new Left("foo").match({
+  Left (str) { ... },
+  Right (str) { ... }
+});
+```
+
+The return value of `match` is the return value of whichever function ends up being called.

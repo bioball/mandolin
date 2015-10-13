@@ -4,6 +4,12 @@ const each = (arr, fn) => {
   }
 };
 
+const map = (arr, fn) => {
+  var result = [];
+  each(arr, (element, i) => result[i] = fn(element, i))
+  return result;
+};
+
 const reduce = (arr, fn, seed) => {
   var result = seed;
   each(arr, (element, i) => result = fn(result, element, i));
