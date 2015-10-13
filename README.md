@@ -155,6 +155,16 @@ const definition = m.define({
 
 `Option.reads` will return either a `None()`, or a `Some(<Any>)`. `Option.as()` accepts a `Reads` argument, to perform further validation after casting away `null` or `undefined`.
 
+Once a definition has been instantiated, calling `parse` will return an `Either`, with the `Right` holding the successfully parsed value, and the `Left` holding the first error encountered while parsing.
+
+```js
+definition.parse({
+  meta: "foo",
+  email: null
+})
+// returns Right({ meta: "foo", email: None() });
+```
+
 ## Types
 
 This library makes no assumptions about type safety. The approach, rather, is to use Reads combinators to serialize monads that follow certain sets of rules. For example, in Scala, an `Option` of a `String` is notated as such:
