@@ -8,6 +8,10 @@ In this library, the monadic `bind` is called `flatMap`, in order to not conflic
 
 In brief, a Monad is a wrapper around a value that allows you to make safe, composable operations. It eliminates the need to throw errors, as well as the need for things like `null` values. A JavaScript `Array` is a monad-like data type, but doesn't fully satisfy the rules of being a monad, given that it doesn't have a `bind` (or `flatMap`) function.
 
+A monad is a type that satisfies the following methods:
+* A composition function, called `>>=`, `bind`, or `flatMap`, that has type `(A) => M<B>`, and returns type `M<B>`.
+* A `return` (or `unit`), that has type `(A) => M<A>`.
+
 Monads are common in functional programming languages.
 
 Here are some great resources that discuss monads:
@@ -20,6 +24,28 @@ Here are some great resources that discuss monads:
 
 * [Option](#option)
 * [Either](#either)
+
+## Installation
+
+This module can be installed either through NPM or Bower.
+
+```bash
+npm install mandolin
+bower install mandolin
+```
+
+Then, if you are within Node.js, or using a CommonJS module loader, simply `require` it in.
+
+```js
+const m = require('mandolin');
+const { Option, Some, None } = m;
+```
+
+You also may choose to include this as a script tag on a page:
+
+```html
+<script src="/lib/mandolin/dist/mandolin.js"></script>
+```
 
 ### Option
 
@@ -51,6 +77,83 @@ if (email !== null || email !== undefined) {
 ### Either
 
 A disjoint union of `Left` and `Right`, and is right-biased. `map` and `flatMap` are only called if it is a `Right`. This is similar to an `Option`, in that `Left : None :: Right : Some`. The difference is that a `Left` can also hold values.
+
+## Reads
+
+Mandolin uses `Reads` objects, which are not monads, but whose purpose are to serialize values into algebraic types (`Option`, `Either`).
+
+A `Reads` is created with this signature:
+
+```js
+const r = new Reads(reader);
+```
+
+Where `reader` is a function that accepts a value, and returns an `Either`; a `Right` with a successful value, or a `Left` with an unsuccessful value. For example, a `reader` of even numbers would look like this:
+
+```js
+const reader = (v) => v % 2 ? new Left("number is not even") : new Right(v);
+```
+
+You can think of a `Reads` as a rule for serializing something. `Reads` can be freely chained together, to further define a rule.
+
+```js
+const y = (v) => v < 10 ? new Left("number is less than 10") : new Right(v);
+const evenAndGreaterThan10 = r.chain(y);
+
+evenAndGreaterThan10.getValue(4) // Left("number is not event")
+evenAndGreaterThan10.getValue(14) // Right(14)
+```
+
+Reads can be chained via `chain`, `map` and `flatMap`.
+
+
+## Parser
+
+Along with `Reads`, Mandolin has `Parser`s that accept arbitrary objects of key --> `Reads` pairs, and returns an either with a successful serialized object, or an error.
+
+This provides a generic way to validate objects, and coerce values into algebraic data types.
+
+You may create a definition with this signature:
+
+```js
+const definition = m.define({
+  age: m.number,
+  name: m.string
+});
+```
+
+In this example, `m.number` and `m.string` are pre-baked `Reads` for primitives. The following are all available:
+
+* `m.number`
+* `m.string`
+* `m.boolean`
+* `m.array`
+* `m.object`
+* `m.undefined`
+* `m.null`
+
+The return value of `m.define` is a `Parser`, which is a special type of `Reads`. Thus, nested objects are simply notated as such:
+
+```js
+const definition = m.define({
+  age: m.number,
+  name: m.string,
+  address: m.define({
+    street1: m.string
+  })
+});
+```
+
+`Option` and `Either` both have a generic way to create `Reads`.
+
+```js
+const definition = m.define({
+  meta: Option.reads,
+  email: Option.as(m.string)
+});
+```
+
+`Option.reads` will return either a `None()`, or a `Some(<Any>)`. `Option.as()` accepts a `Reads` argument, to perform further validation after casting away `null` or `undefined`.
 
 ## Types
 
