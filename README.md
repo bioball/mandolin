@@ -20,32 +20,24 @@ Here are some great resources that discuss monads:
 * [James Coglan: Promises are the monad of asynchronous programming](https://blog.jcoglan.com/2011/03/11/promises-are-the-monad-of-asynchronous-programming/)
 * [Douglas Crockford: Monads and Gonads](https://www.youtube.com/watch?v=b0EF0VTs9Dc)
 
-## Available monads
-
-* [Option](#option)
-* [Either](#either)
-
 ## Installation
-
-This module can be installed either through NPM or Bower.
 
 ```bash
 npm install mandolin
 bower install mandolin
 ```
 
-Then, if you are within Node.js, or using a CommonJS module loader, simply `require` it in.
+Currently, you must use a CommonJS loader to `require` this module.
 
 ```js
 const m = require('mandolin');
 const { Option, Some, None } = m;
 ```
 
-You also may choose to include this as a script tag on a page:
+## Available monads
 
-```html
-<script src="/lib/mandolin/dist/mandolin.js"></script>
-```
+* [Option](#option)
+* [Either](#either)
 
 ### Option
 
@@ -176,10 +168,10 @@ Option[String]
 The seemingly equivalent example in our library is this:
 
 ```js
-Option.as(M.string)
+Option.as(m.string)
 ```
 
-The difference is, `Option.as(M.String)` is not a type, but a rule for reading in values. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any compile-time type checking.
+The difference is, `Option.as(m.String)` is not a type, but a rule for reading in values. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any compile-time type checking.
 
 ## Pattern Matching
 
