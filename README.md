@@ -97,8 +97,8 @@ const reader = (v) => v % 2 ? new Left("number is not even") : new Right(v);
 You can think of a `Reads` as a rule for serializing something. `Reads` can be freely chained together, to further define a rule.
 
 ```js
-const y = (v) => v < 10 ? new Left("number is less than 10") : new Right(v);
-const evenAndGreaterThan10 = r.chain(y);
+const greaterThan10 = new Reads((v) => v < 10 ? new Left("number is less than 10") : new Right(v));
+const evenAndGreaterThan10 = r.chain(greaterThan10);
 
 evenAndGreaterThan10.getValue(4) // Left("number is not event")
 evenAndGreaterThan10.getValue(14) // Right(14)
