@@ -1,5 +1,7 @@
 # Mandolin
 
+[![Build Status](https://travis-ci.org/bioball/mandolin.svg)](https://travis-ci.org/bioball/mandolin)
+
 Painlessly enhance your JavaScript with monadic types.
 
 ```js
@@ -183,7 +185,7 @@ The seemingly equivalent example in our library is this:
 Option.as(m.string)
 ```
 
-The difference is, `Option.as(m.String)` is not a type, but a rule for reading in values. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any compile-time type checking.
+The difference is, `Option.as(m.String)` is not a type, but a rule for reading in values. I can just as easily write another rule for `Option.as(evenNumber)`. Essentially, this is the same thing as types, but I think makes more sense in a world that doesn't perform any compile-time type checking.
 
 ## Pattern Matching
 
@@ -196,4 +198,11 @@ new Left("foo").match({
 });
 ```
 
-The return value of `match` is the return value of whichever function ends up being called.
+The return value of `match` is the return value of whichever function ends up being called. This is analagous to Scala's `match`.
+
+```scala
+foo match {
+  case Left(_) => ???
+  case Right(_) => ???
+}
+```

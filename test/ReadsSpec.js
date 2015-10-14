@@ -43,7 +43,7 @@ describe('Reads', function(){
   it('can chain', function(){
     const readOdds = new Reads((v) => v % 2 ? new Right(v) : new Left(v));
     const readAsString = new Reads((v) => new Right(v.toString()));
-    const readOddsThenAsString = readOdds.chain(readAsString);
+    const readOddsThenAsString = readOdds.with(readAsString);
     expect(readOddsThenAsString.getValue(2).isLeft()).to.be.true;
     expect(readOddsThenAsString.getValue(3).get()).to.equal("3");
   });
