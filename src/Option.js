@@ -181,6 +181,8 @@ Option.reads = new Reads(function(val){
  */
 Option.as = (read) => read.map(Some.unit).mapLeft(None.unit);
 
+Option.unit = Option.of = (val) => new Some(val)
+
 
 /**
  * @class Some. 
@@ -198,8 +200,6 @@ class Some extends Option {
   }
 }
 
-Some.unit = Some.of = (val) => new Some(val);
-
 /**
  * @class None
  * Holds no value.
@@ -215,7 +215,5 @@ class None extends Option {
     return "None()";
   }
 }
-
-None.unit = None.of = () => new None();
 
 module.exports = { Option, Some, None };

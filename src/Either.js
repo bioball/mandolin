@@ -207,6 +207,8 @@ class Either {
  */
 Either.prototype.chain = Either.prototype.flatMap;
 
+Either.unit = Either.of = (v) => new Right(v);
+
 
 /**
  * Read in an either, given a Reads for the left, and a Reads for the right. 
