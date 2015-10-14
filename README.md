@@ -11,8 +11,8 @@ const definition = m.define({
 });
 
 definition.parse(val).match({
-  Right: (user) => doThingWithUser(user),
-  Left (err) => handleError(err)
+  Right (user) { return doThingWithUser(user) },
+  Left (err) { return handleError(err) }
 });
 
 const user = new User({ firstName: "Bob", lastName: "McAdoo", email: null });
