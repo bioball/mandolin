@@ -1,23 +1,19 @@
 # Mandolin
 
-Painlessly enhance your code with monadic types.
+Painlessly enhance your JavaScript with monadic types.
 
 ```js
-const m = require('mandolin');
+const definition = m.define({
+  firstName: m.string,
+  lastName: Option.as(m.string),
+  email: Option.as(m.string),
+  phoneNumber: Either.as(m.string, m.number)
+});
 
-class User {
-  constructor (properties = {}) {
-    const definition = m.define({
-      firstName: m.string,
-      lastName: Option.as(m.string),
-      email: Option.as(m.string)  
-    });
-    definition.parse(properties).match({
-      Right: (user) => _.extend(this, user),
-      Left (err) => handleError(err)
-    })
-  }
-}
+definition.parse(val).match({
+  Right: (user) => doThingWithUser(user),
+  Left (err) => handleError(err)
+});
 
 const user = new User({ firstName: "Bob", lastName: "McAdoo", email: null });
 // User { firstName: "Bob", lastName: Some("McAdoo"), email: None() }
