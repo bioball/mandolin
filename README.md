@@ -14,8 +14,6 @@ definition.parse({ firstName: "Bob", lastName: "McAdoo", email: null, phoneNumbe
 // Right({ firstName: "Bob", lastName: Some("McAdoo"), email: None(), phoneNumber: Left("444-444-4444") })
 ```
 
-In this library, the monadic `bind` is called `flatMap`, in order to not conflict with `Function.prototype.bind`. The monadic `return` is called `unit`, to not cause any confusion with the `return` keyword.
-
 ## What is a monad?
 
 In brief, a Monad is a wrapper around a value that allows you to make safe, composable operations. It eliminates the need to throw errors, as well as the need for things like `null` values. A JavaScript `Array` is a monad-like data type, but doesn't fully satisfy the rules of being a monad, given that it doesn't have a `bind` (or `flatMap`) function.
@@ -31,6 +29,8 @@ Here are some great resources that discuss monads:
 * [Brian Beckman: Don't Fear The Monad](https://www.youtube.com/watch?v=ZhuHCtR3xq8)
 * [James Coglan: Promises are the monad of asynchronous programming](https://blog.jcoglan.com/2011/03/11/promises-are-the-monad-of-asynchronous-programming/)
 * [Douglas Crockford: Monads and Gonads](https://www.youtube.com/watch?v=b0EF0VTs9Dc)
+
+In this library, the monadic `bind` is called `flatMap`, in order to not conflict with `Function.prototype.bind`. The monadic `return` is called `unit`, to not cause any confusion with the `return` keyword.
 
 ## Installation
 
