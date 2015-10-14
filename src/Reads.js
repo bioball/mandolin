@@ -53,7 +53,7 @@ class Reads {
    * @param {Reads} r 
    * @return {Reads}
    */
-  chain (r) {
+  with (r) {
     return this.flatMap(r.getValue);
   }
 
@@ -62,7 +62,7 @@ class Reads {
    * @param {Reads} r 
    * @return {Reads}
    */
-  chainLeft (r) {
+  withLeft (r) {
     return this.flatMapLeft(r.getValue);
   }
 

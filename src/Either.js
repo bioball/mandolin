@@ -202,9 +202,11 @@ class Either {
 
 }
 
-Either.unit = function(v) {
-  return new Right(v);
-};
+/**
+ * @alias flatMap
+ */
+Either.prototype.chain = Either.prototype.flatMap;
+
 
 /**
  * Read in an either, given a Reads for the left, and a Reads for the right. 
@@ -249,7 +251,7 @@ class Left extends Either {
   }
 }
 
-Left.unit = (v) => new Left(v);
+Left.unit = Left.of = (v) => new Left(v);
 
 /**
  * @class Right
@@ -265,6 +267,6 @@ class Right extends Either {
   }
 }
 
-Right.unit = (v) => new Right(v);
+Right.unit = Right.of = (v) => new Right(v);
 
 module.exports = { Either, Left, Right };

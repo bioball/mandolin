@@ -58,7 +58,7 @@ class Option {
    * @example
    * Some(5).flatMap((val) => new Option(val + 4))
    * // => Some(9)
-   * 
+   *
    * @param  {(A) => new Option(A)} f
    * @return {A}
    */
@@ -149,6 +149,11 @@ class Option {
 }
 
 /**
+ * @alias flatMap
+ */
+Option.prototype.chain = Option.prototype.flatMap;
+
+/**
  * Generic Reads for the option type.
  * @return {Right<Option>}
  */
@@ -176,10 +181,6 @@ Option.reads = new Reads(function(val){
  */
 Option.as = (read) => read.map(Some.unit).mapLeft(None.unit);
 
-/**
- * Wrap a value in a Some
- */
-Option.unit = (val) => new Some(val);
 
 /**
  * @class Some. 
@@ -197,7 +198,7 @@ class Some extends Option {
   }
 }
 
-Some.unit = (val) => new Some(val);
+Some.unit = Some.of = (val) => new Some(val);
 
 /**
  * @class None
@@ -215,6 +216,6 @@ class None extends Option {
   }
 }
 
-None.unit = () => new None();
+None.unit = None.of = () => new None();
 
 module.exports = { Option, Some, None };
