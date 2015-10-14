@@ -268,6 +268,10 @@ var Either = (function () {
 
 Either.prototype.chain = Either.prototype.flatMap;
 
+Either.unit = Either.of = function (v) {
+  return new Right(v);
+};
+
 /**
  * Read in an either, given a Reads for the left, and a Reads for the right. 
  * If the reads for the right returns a Left, it will return the Reads for the left.

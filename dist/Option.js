@@ -236,6 +236,10 @@ Option.as = function (read) {
   return read.map(Some.unit).mapLeft(None.unit);
 };
 
+Option.unit = Option.of = function (val) {
+  return new Some(val);
+};
+
 /**
  * @class Some. 
  * Holds a value, but has no opinion on what that value is. The value can even be undefined.
@@ -252,6 +256,13 @@ var Some = (function (_Option) {
     _get(Object.getPrototypeOf(Some.prototype), 'constructor', this).call(this, val);
   }
 
+  /**
+   * @class None
+   * Holds no value.
+   *
+   * @augments {Option}
+   */
+
   _createClass(Some, [{
     key: 'toString',
     value: function toString() {
@@ -261,17 +272,6 @@ var Some = (function (_Option) {
 
   return Some;
 })(Option);
-
-Some.unit = Some.of = function (val) {
-  return new Some(val);
-};
-
-/**
- * @class None
- * Holds no value.
- *
- * @augments {Option}
- */
 
 var None = (function (_Option2) {
   _inherits(None, _Option2);
@@ -291,9 +291,5 @@ var None = (function (_Option2) {
 
   return None;
 })(Option);
-
-None.unit = None.of = function () {
-  return new None();
-};
 
 module.exports = { Option: Option, Some: Some, None: None };
