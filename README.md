@@ -10,13 +10,8 @@ const definition = m.define({
   phoneNumber: Either.as(m.string, m.number)
 });
 
-definition.parse(val).match({
-  Right (user) { return doThingWithUser(user) },
-  Left (err) { return handleError(err) }
-});
-
-const user = new User({ firstName: "Bob", lastName: "McAdoo", email: null });
-// User { firstName: "Bob", lastName: Some("McAdoo"), email: None() }
+definition.parse({ firstName: "Bob", lastName: "McAdoo", email: null })
+// Right({ firstName: "Bob", lastName: Some("McAdoo"), email: None(), phoneNumber: Left("444-444-4444") })
 ```
 
 In this library, the monadic `bind` is called `flatMap`, in order to not conflict with `Function.prototype.bind`. The monadic `return` is called `unit`, to not cause any confusion with the `return` keyword.
