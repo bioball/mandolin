@@ -36,8 +36,7 @@ var Option = (function () {
   }
 
   /**
-   * Generic Reads for the option type.
-   * @return {Right<Option>}
+   * @alias flatMap
    */
 
   _createClass(Option, [{
@@ -89,7 +88,7 @@ var Option = (function () {
      * @example
      * Some(5).flatMap((val) => new Option(val + 4))
      * // => Some(9)
-     * 
+     *
      * @param  {(A) => new Option(A)} f
      * @return {A}
      */
@@ -205,6 +204,12 @@ var Option = (function () {
   return Option;
 })();
 
+Option.prototype.chain = Option.prototype.flatMap;
+
+/**
+ * Generic Reads for the option type.
+ * @return {Right<Option>}
+ */
 Option.reads = new Reads(function (val) {
   var opt = val === null || val === undefined ? new None() : new Some(val);
   return new Right(opt);
@@ -229,13 +234,6 @@ Option.reads = new Reads(function (val) {
  */
 Option.as = function (read) {
   return read.map(Some.unit).mapLeft(None.unit);
-};
-
-/**
- * Wrap a value in a Some
- */
-Option.unit = function (val) {
-  return new Some(val);
 };
 
 /**
@@ -264,7 +262,7 @@ var Some = (function (_Option) {
   return Some;
 })(Option);
 
-Some.unit = function (val) {
+Some.unit = Some.of = function (val) {
   return new Some(val);
 };
 
@@ -294,7 +292,7 @@ var None = (function (_Option2) {
   return None;
 })(Option);
 
-None.unit = function () {
+None.unit = None.of = function () {
   return new None();
 };
 

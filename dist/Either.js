@@ -30,6 +30,10 @@ var Either = (function () {
     this.val = val;
   }
 
+  /**
+   * @alias flatMap
+   */
+
   _createClass(Either, [{
     key: "isLeft",
     value: function isLeft() {
@@ -262,9 +266,7 @@ var Either = (function () {
   return Either;
 })();
 
-Either.unit = function (v) {
-  return new Right(v);
-};
+Either.prototype.chain = Either.prototype.flatMap;
 
 /**
  * Read in an either, given a Reads for the left, and a Reads for the right. 
@@ -319,7 +321,7 @@ var Left = (function (_Either) {
   return Left;
 })(Either);
 
-Left.unit = function (v) {
+Left.unit = Left.of = function (v) {
   return new Left(v);
 };
 
@@ -347,7 +349,7 @@ var Right = (function (_Either2) {
   return Right;
 })(Either);
 
-Right.unit = function (v) {
+Right.unit = Right.of = function (v) {
   return new Right(v);
 };
 

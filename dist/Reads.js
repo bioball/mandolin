@@ -91,8 +91,8 @@ var Reads = (function () {
      * @return {Reads}
      */
   }, {
-    key: 'chain',
-    value: function chain(r) {
+    key: 'with',
+    value: function _with(r) {
       return this.flatMap(r.getValue);
     }
 
@@ -102,8 +102,8 @@ var Reads = (function () {
      * @return {Reads}
      */
   }, {
-    key: 'chainLeft',
-    value: function chainLeft(r) {
+    key: 'withLeft',
+    value: function withLeft(r) {
       return this.flatMapLeft(r.getValue);
     }
 
