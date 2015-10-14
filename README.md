@@ -10,7 +10,7 @@ const definition = m.define({
   phoneNumber: Either.as(m.string, m.number)
 });
 
-definition.parse({ firstName: "Bob", lastName: "McAdoo", email: null })
+definition.parse({ firstName: "Bob", lastName: "McAdoo", email: null, phoneNumber: "444-444-4444" })
 // Right({ firstName: "Bob", lastName: Some("McAdoo"), email: None(), phoneNumber: Left("444-444-4444") })
 ```
 
