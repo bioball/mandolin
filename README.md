@@ -1,6 +1,27 @@
 # Mandolin
 
-This is a library of Monads in JavaScript. The intent of this library is to provide Monads, as well as a great way to interop between Monadic types and vanilla JS types.
+Painlessly enhance your code with monadic types.
+
+```js
+const m = require('mandolin');
+
+class User {
+  constructor (properties = {}) {
+    const definition = m.define({
+      firstName: m.string,
+      lastName: Option.as(m.string),
+      email: Option.as(m.string)  
+    });
+    definition.parse(properties).match({
+      Right: (user) => _.extend(this, user),
+      Left (err) => handleError(err)
+    })
+  }
+}
+
+const user = new User({ firstName: "Bob", lastName: "McAdoo", email: null });
+// User { firstName: "Bob", lastName: Some("McAdoo"), email: None() }
+```
 
 In this library, the monadic `bind` is called `flatMap`, in order to not conflict with `Function.prototype.bind`. The monadic `return` is called `unit`, to not cause any confusion with the `return` keyword.
 
@@ -159,7 +180,7 @@ definition.parse({
 
 ## Types
 
-This library makes no assumptions about type safety. The approach, rather, is to use Reads combinators to serialize monads that follow certain sets of rules. For example, in Scala, an `Option` of a `String` is notated as such:
+This library makes no assumptions about type safety. The approach, rather, is to use Reads combinators to serialize values that follow certain sets of rules. For example, in Scala, an `Option` of a `String` is notated as such:
 
 ```scala
 Option[String]
