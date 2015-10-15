@@ -6,7 +6,10 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp-eslint": "^1.0.0",
+    "gulp-watch": "^4.3.5"
+  },
   "devDependencies": {
     "babel": "^5.8.23",
     "chai": "~3.3.0",
