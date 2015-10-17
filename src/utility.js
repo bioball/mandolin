@@ -72,3 +72,14 @@ module.exports.array = new Reads(function (v) {
   }
   return new Left(new Error(`Attempted to read value as Array, but instead got ${ v }`));
 });
+
+/**
+ * Read in any value.
+ *
+ * @example
+ * m.define({ foo: m.any }).parse("blah")
+ * Right({ foo: "blah" })
+ * 
+ * @type {Reads}
+ */
+module.exports.any = new Reads(Either.unit);

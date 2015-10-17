@@ -12,8 +12,18 @@ const definition = m.define({
   phoneNumber: Either.as(m.string, m.number)
 });
 
-definition.parse({ firstName: "Bob", lastName: "McAdoo", email: null, phoneNumber: "444-444-4444" })
-// Right({ firstName: "Bob", lastName: Some("McAdoo"), email: None(), phoneNumber: Left("444-444-4444") })
+definition.parse({
+  firstName: "Bob",
+  lastName: "McAdoo",
+  email: null,
+  phoneNumber: "444-444-4444"
+})
+// Right({ 
+//   firstName: "Bob",
+//   lastName: Some("McAdoo"),
+//   email: None(),
+//   phoneNumber: Left("444-444-4444")
+// })
 ```
 
 ## What is a monad?
@@ -137,6 +147,7 @@ In this example, `m.number` and `m.string` are pre-baked `Reads` for primitives.
 * `m.object`
 * `m.undefined`
 * `m.null`
+* `m.any`
 
 The return value of `m.define` is a `Parser`, which is a special type of `Reads`. Thus, nested objects are simply notated as such:
 
@@ -168,7 +179,10 @@ definition.parse({
   meta: "foo",
   email: null
 })
-// returns Right({ meta: "foo", email: None() });
+// returns Right({
+//   meta: Some("foo"),
+//   email: None()
+// });
 ```
 
 ## Types
