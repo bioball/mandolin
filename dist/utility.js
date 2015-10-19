@@ -1,6 +1,6 @@
 /**
  * @fileOverview 
- * Utility toolbelt. This is where M.define, M.string, M.instance, etc, are defined.
+ * Utility toolbelt. This is where m.define, m.string, m.instance, etc, are defined.
  */
 'use strict';
 
@@ -18,9 +18,9 @@ var Right = _require.Right;
  * Return a new parser with a definition.
  *
  * @example
- * M.define({
- *   foo: M.define({
- *     bar: M.string
+ * m.define({
+ *   foo: m.define({
+ *     bar: m.string
  *   })
  * })
  * 
@@ -71,3 +71,14 @@ module.exports.array = new Reads(function (v) {
   }
   return new Left(new Error('Attempted to read value as Array, but instead got ' + v));
 });
+
+/**
+ * Read in any value.
+ *
+ * @example
+ * m.define({ foo: m.any }).parse("blah")
+ * Right({ foo: "blah" })
+ * 
+ * @type {Reads}
+ */
+module.exports.any = new Reads(Either.unit);

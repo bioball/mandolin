@@ -201,6 +201,26 @@ var Either = (function () {
     }
 
     /**
+     * Perform an equals match on the value wrapped by Either. The wrapped value must strict equal, and the type must line up.
+     * 
+     * @return {Boolean}
+     */
+  }, {
+    key: "equals",
+    value: function equals(either) {
+      var _this = this;
+
+      if (!either instanceof Either) {
+        return false;
+      }
+      return either.map(function (v) {
+        return _this.isRight() && _this.val === v;
+      }).getOrElse(function (v) {
+        return _this.isLeft() && _this.val === v;
+      });
+    }
+
+    /**
      * Cast this to a Right.
      * @return {Right}
      */
@@ -315,6 +335,11 @@ var Left = (function (_Either) {
     _get(Object.getPrototypeOf(Left.prototype), "constructor", this).call(this, val);
   }
 
+  /**
+   * @class Right
+   * @augments {Either}
+   */
+
   _createClass(Left, [{
     key: "toString",
     value: function toString() {
@@ -324,15 +349,6 @@ var Left = (function (_Either) {
 
   return Left;
 })(Either);
-
-Left.unit = Left.of = function (v) {
-  return new Left(v);
-};
-
-/**
- * @class Right
- * @augments {Either}
- */
 
 var Right = (function (_Either2) {
   _inherits(Right, _Either2);
@@ -352,9 +368,5 @@ var Right = (function (_Either2) {
 
   return Right;
 })(Either);
-
-Right.unit = Right.of = function (v) {
-  return new Right(v);
-};
 
 module.exports = { Either: Either, Left: Left, Right: Right };

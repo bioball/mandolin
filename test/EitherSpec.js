@@ -17,6 +17,15 @@ describe('Either', function(){
     expect(Either).to.respondTo("match");
   });
 
+  it('has left identity', function(){
+    const addFour = (v) => new Right(v + 4);
+    expect(Either.unit(3).flatMap(addFour).equals(addFour(3))).to.be.true;
+  });
+
+  it('has right identity', function(){
+    expect(new Right(3).flatMap(Either.unit).equals(new Right(3))).to.be.true;
+  });
+
   describe('Right', function(){
     it("knows it is a Right", function(){
       const r = new Right("foo");
@@ -62,5 +71,6 @@ describe('Either', function(){
     };
     expect(JSON.stringify(obj)).to.equal('{"opt":"bar"}');
   });
+
 
 });

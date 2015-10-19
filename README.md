@@ -220,3 +220,8 @@ foo match {
   case Right(_) => ???
 }
 ```
+
+
+## Fantasy-land
+
+This module is [fantasy-land](https://github.com/fantasyland/fantasy-land) compliant. `chain` is an alias of `flatMap`, and `of` is an alias of `unit`.

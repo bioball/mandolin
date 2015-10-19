@@ -160,6 +160,20 @@ class Either {
   }
 
   /**
+   * Perform an equals match on the value wrapped by Either. The wrapped value must strict equal, and the type must line up.
+   * 
+   * @return {Boolean}
+   */
+  equals (either) {
+    if (!either instanceof Either) { return false; }
+    return either.map((v) => {
+      return this.isRight() && this.val === v;
+    }).getOrElse((v) => {
+      return this.isLeft() && this.val === v;
+    });
+  }
+
+  /**
    * Cast this to a Right.
    * @return {Right}
    */
@@ -253,8 +267,6 @@ class Left extends Either {
   }
 }
 
-Left.unit = Left.of = (v) => new Left(v);
-
 /**
  * @class Right
  * @augments {Either}
@@ -268,7 +280,5 @@ class Right extends Either {
     return `Right(${ this.val })`;
   }
 }
-
-Right.unit = Right.of = (v) => new Right(v);
 
 module.exports = { Either, Left, Right };

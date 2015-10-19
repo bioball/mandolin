@@ -125,6 +125,18 @@ class Option {
   }
 
   /**
+   * Equality check of the wrapped value.
+   * 
+   * @param  {Option} option
+   * @return {Boolean}
+   */
+  equals (option) {
+    if (!option instanceof Option) { return false; }
+    return option.map((v) => this.isSome() && this.get() === v)
+    .getOrElse((v) => this.isNone())
+  }
+
+  /**
    * Coerce this to an Either. A Some becomes a Right, a None becomes a Left with no value.
    * @return {Either<null, A>}
    */

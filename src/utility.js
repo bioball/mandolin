@@ -1,6 +1,6 @@
 /**
  * @fileOverview 
- * Utility toolbelt. This is where M.define, M.string, M.instance, etc, are defined.
+ * Utility toolbelt. This is where m.define, m.string, m.instance, etc, are defined.
  */
 const Reads = require('./Reads');
 const Parser = require('./Parser');
@@ -12,9 +12,9 @@ const { Either, Left, Right } = require('./Either');
  * Return a new parser with a definition.
  *
  * @example
- * M.define({
- *   foo: M.define({
- *     bar: M.string
+ * m.define({
+ *   foo: m.define({
+ *     bar: m.string
  *   })
  * })
  * 

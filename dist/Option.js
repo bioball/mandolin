@@ -167,6 +167,27 @@ var Option = (function () {
     }
 
     /**
+     * Equality check of the wrapped value.
+     * 
+     * @param  {Option} option
+     * @return {Boolean}
+     */
+  }, {
+    key: 'equals',
+    value: function equals(option) {
+      var _this = this;
+
+      if (!option instanceof Option) {
+        return false;
+      }
+      return option.map(function (v) {
+        return _this.isSome() && _this.get() === v;
+      }).getOrElse(function (v) {
+        return _this.isNone();
+      });
+    }
+
+    /**
      * Coerce this to an Either. A Some becomes a Right, a None becomes a Left with no value.
      * @return {Either<null, A>}
      */
