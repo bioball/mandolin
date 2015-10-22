@@ -1,0 +1,21 @@
+{
+  "name": "react-example",
+  "version": "0.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "browserify -t babelify src/application.js -o dist/application.js",
+    "watch": "watchify -t babelify src/application.js -o dist/application.js"
+  },
+  "author": "Daniel Chao (http://dchao.co/)",
+  "license": "ISC",
+  "dependencies": {
+    "react": "~0.14.0",
+    "browserify": "~11.2.0",
+    "babelify": "~6.3.0",
+    "mandolin": "0.0.0",
+    "react-dom": "~0.14.0",
+    "lodash": "~3.10.1"
+  }
+}

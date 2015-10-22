@@ -1,0 +1,23 @@
+[
+  {
+    "firstName": "Bob",
+    "lastName": null,
+    "email": "bob@mcadoo.com",
+    "address": null,
+    "age": 52,
+    "avatarUrl": "http://img.spokeo.com/public/900-600/bob_mcadoo_1972_01_01.jpg"
+  },
+  {
+    "firstName": "Sally",
+    "lastName": "Sparrow",
+    "email": "sally@sparrow.com",
+    "age": 21,
+    "address": {
+      "Address 1": "One Kings Lane",
+      "Address 2": null,
+      "City": "London",
+      "Country": "UK"
+    },
+    "avatarUrl": "http://cdn-static.denofgeek.com/sites/denofgeek/files/images/30143.jpg"
+  },
+]
